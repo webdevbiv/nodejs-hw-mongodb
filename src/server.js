@@ -3,6 +3,7 @@ import cors from 'cors';
 import { getEnv } from './utils/getEnv.js';
 import { logger } from './utils/logger.js';
 import contactsRouter from './routes/contacts.js';
+import { HttpStatus, Messages } from './constants/index.js';
 
 const app = express();
 app.use(cors());
@@ -10,22 +11,19 @@ app.use(cors());
 export function setupServer() {
   const PORT = getEnv('PORT', 8080);
 
-  // Middleware to parse JSON requests
   app.use(express.json());
 
-  // Set up routes
   app.use('/contacts', contactsRouter);
 
-  // 404 error handler
+  // 404 handler
   app.use((req, res) => {
-    logger.warn(`Not Found`);
-    res.status(404).json({
-      status: 404,
-      message: 'Not found',
+    logger.warn(`Not Found: ${req.method} ${req.originalUrl}`);
+    res.status(HttpStatus.NOT_FOUND).json({
+      status: HttpStatus.NOT_FOUND,
+      message: Messages.NOT_FOUND,
     });
   });
 
-  // Start the server
   app.listen(PORT, () => {
     logger.info(`Server is running on ${PORT}`);
   });
