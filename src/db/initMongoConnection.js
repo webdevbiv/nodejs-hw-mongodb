@@ -9,9 +9,9 @@ export async function initMongoConnection() {
   const dbName = getEnv('MONGODB_DB');
 
   const connectionString = urlTemplate
-    .replace('<USER>', user)
-    .replace('<PASSWORD>', password)
-    .replace('<DB>', dbName);
+    .replace('<MONGODB_USER>', user)
+    .replace('<MONGODB_PASSWORD>', password)
+    .replace('<MONGODB_DB>', dbName);
 
   try {
     await mongoose.connect(connectionString);

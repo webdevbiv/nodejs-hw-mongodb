@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { getEnv } from './utils/getEnv.js';
 import { logger } from './utils/logger.js';
+import contactsRouter from './routes/contacts.js';
 
 const app = express();
 app.use(cors());
@@ -12,11 +13,8 @@ export function setupServer() {
   // Middleware to parse JSON requests
   app.use(express.json());
 
-  // Sample route
-  app.get('/', (req, res) => {
-    res.send('Hello, World!');
-    logger.info('Root route accessed');
-  });
+  // Set up routes
+  app.use('/contacts', contactsRouter);
 
   // 404 error handler
   app.use((req, res) => {
