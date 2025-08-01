@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import { getAllContacts, getContactById } from '../services/contacts.js';
 
 export const handleGetAllContacts = async (req, res, next) => {
@@ -16,12 +17,20 @@ export const handleGetAllContacts = async (req, res, next) => {
 export const handleGetContactById = async (req, res, next) => {
   try {
     const { contactId } = req.params;
+
+    if (!mongoose.isValidObjectId(contactId)) {
+      return res.status(400).json({
+        status: 400,
+        message: `Invalid contact ID: ${contactId}`,
+      });
+    }
+
     const contact = await getContactById(contactId);
 
     if (!contact) {
       return res.status(404).json({
         status: 404,
-        message: `Contact not found`,
+        message: `Contact with ID ${contactId} not found`,
       });
     }
 
