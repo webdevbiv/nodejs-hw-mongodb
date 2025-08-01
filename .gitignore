@@ -1,41 +1,42 @@
-# Node.js
+# Node.js dependencies
 node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 package-lock.json
-.env
+yarn.lock
 
 # Logs
 logs/
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# OS
-.DS_Store
-Thumbs.db
+# Runtime data and process IDs
+pids/
+*.pid
+*.seed
+*.pid.lock
 
-# Optional build or cache folders
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Coverage reports
+coverage/
+
+# Build output
 dist/
 build/
 .cache/
 tmp/
 temp/
 
+# OS-generated files
+.DS_Store
+Thumbs.db
+
 # IDEs and editors
 .vscode/
 .idea/
 *.sublime-workspace
 *.sublime-project
-
-# Coverage reports
-coverage/
-
-# PM2 logs
-pids/
-*.pid
-*.seed
-*.pid.lock
-
-# dotenv environment variable files
-.env.*
-!.env.example
