@@ -14,6 +14,10 @@ export function setupServer() {
 
   app.use(express.json());
 
+  app.get('/', (req, res) => {
+    res.send('Contacts API is running.');
+  });
+
   app.use('/contacts', contactsRouter);
 
   // 404 handler
