@@ -7,7 +7,7 @@ export function errorHandler(err, req, res, next) {
       ? err
       : createError(err.status || 500, err.message, { cause: err });
 
-  const { status = 500, message, stack } = error;
+  const { status = 500, message, stack, details } = error;
 
   logger.error(`[${req.method}] ${req.originalUrl} -> ${status}: ${message}`);
   logger.debug(stack);
@@ -16,5 +16,6 @@ export function errorHandler(err, req, res, next) {
     status: 'error',
     code: status,
     message,
+    ...(details && { details }),
   });
 }
