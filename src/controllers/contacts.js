@@ -18,16 +18,34 @@ export const handleGetAllContacts = async (req, res) => {
   const perPage = parseInt(req.query.perPage) || 10;
   const skip = (page - 1) * perPage;
 
+  const sortBy = req.query.sortBy || 'name';
+  const sortOrder = req.query.sortOrder === 'desc' ? -1 : 1;
+  const sortOptions = { [sortBy]: sortOrder };
+
+  const filter = {};
+
+  if (req.query.type) {
+    filter.contactType = req.query.type;
+  }
+
+  if (req.query.isFavourite !== undefined) {
+    filter.isFavourite = req.query.isFavourite === 'true';
+  }
+
+  logger.info(
+    `[GET] /contacts -> page=${page}, perPage=${perPage}, sortBy=${sortBy}, sortOrder=${
+      req.query.sortOrder || 'asc'
+    }, filter=${JSON.stringify(filter)}`,
+  );
+
   const [totalItems, contacts] = await Promise.all([
-    getContactsCount(),
-    getAllContacts(skip, perPage),
+    getContactsCount(filter),
+    getAllContacts(skip, perPage, sortOptions, filter),
   ]);
 
   const totalPages = Math.ceil(totalItems / perPage);
 
-  logger.info(
-    `[GET] /contacts?page=${page}&perPage=${perPage} -> ${contacts.length} items returned`,
-  );
+  logger.info(`[GET] /contacts -> Returned ${contacts.length} contacts`);
 
   res.status(HttpStatus.OK).json({
     status: HttpStatus.OK,

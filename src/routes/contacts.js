@@ -13,10 +13,16 @@ import {
   createContactSchema,
   updateContactSchema,
 } from '../validation/contacts.js';
+import { validateQuery } from '../middlewares/validateQuery.js';
+import { getContactsQuerySchema } from '../validation/query.js';
 
 const router = express.Router();
 
-router.get('/', ctrlWrapper(handleGetAllContacts));
+router.get(
+  '/',
+  validateQuery(getContactsQuerySchema),
+  ctrlWrapper(handleGetAllContacts),
+);
 
 router.get('/:contactId', isValidId, ctrlWrapper(handleGetContactById));
 

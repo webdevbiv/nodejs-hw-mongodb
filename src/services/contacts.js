@@ -1,11 +1,16 @@
 import { Contact } from '../validation/contacts.js';
 
-export const getAllContacts = async (skip = 0, limit = 10) => {
-  return Contact.find().skip(skip).limit(limit);
+export const getAllContacts = async (
+  skip = 0,
+  limit = 10,
+  sort = {},
+  filter = {},
+) => {
+  return Contact.find(filter).skip(skip).limit(limit).sort(sort);
 };
 
-export const getContactsCount = async () => {
-  return Contact.countDocuments();
+export const getContactsCount = async (filter = {}) => {
+  return Contact.countDocuments(filter);
 };
 
 export const getContactById = (id) => Contact.findById(id);
