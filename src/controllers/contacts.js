@@ -67,6 +67,7 @@ export const handleGetContactById = async (req, res) => {
 
   if (!mongoose.isValidObjectId(contactId)) {
     logger.warn(`[GET] /contacts/${contactId} -> Invalid ID`);
+
     throw createError(HttpStatus.BAD_REQUEST, Messages.INVALID_ID(contactId));
   }
 
@@ -74,6 +75,7 @@ export const handleGetContactById = async (req, res) => {
 
   if (!contact) {
     logger.warn(`[GET] /contacts/${contactId} -> Not found`);
+
     throw createError(
       HttpStatus.NOT_FOUND,
       Messages.CONTACT_NOT_FOUND(contactId),
@@ -106,6 +108,7 @@ export const handlePatchContact = async (req, res) => {
 
   if (!mongoose.isValidObjectId(contactId)) {
     logger.warn(`[PATCH] /contacts/${contactId} -> Invalid ID`);
+
     throw createError(HttpStatus.BAD_REQUEST, Messages.INVALID_ID(contactId));
   }
 
@@ -113,6 +116,7 @@ export const handlePatchContact = async (req, res) => {
 
   if (!updated) {
     logger.warn(`[PATCH] /contacts/${contactId} -> Not found`);
+
     throw createError(
       HttpStatus.NOT_FOUND,
       Messages.CONTACT_NOT_FOUND(contactId),
@@ -133,6 +137,7 @@ export const handleDeleteContact = async (req, res) => {
 
   if (!mongoose.isValidObjectId(contactId)) {
     logger.warn(`[DELETE] /contacts/${contactId} -> Invalid ID`);
+
     throw createError(HttpStatus.BAD_REQUEST, Messages.INVALID_ID(contactId));
   }
 
@@ -140,6 +145,7 @@ export const handleDeleteContact = async (req, res) => {
 
   if (!deleted) {
     logger.warn(`[DELETE] /contacts/${contactId} -> Not found`);
+
     throw createError(
       HttpStatus.NOT_FOUND,
       Messages.CONTACT_NOT_FOUND(contactId),
@@ -148,5 +154,5 @@ export const handleDeleteContact = async (req, res) => {
 
   logger.info(`[DELETE] /contacts/${contactId} -> Deleted`);
 
-  res.sendStatus(HttpStatus.NO_CONTENT); // 204
+  res.sendStatus(HttpStatus.NO_CONTENT);
 };
