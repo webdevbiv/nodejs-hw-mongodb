@@ -6,18 +6,25 @@ import contactsRouter from './routes/contacts.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 
+// Initialize the Express application
 const app = express();
+
+// Enable CORS for all routes
 app.use(cors());
 
 export function setupServer() {
+  logger.info('Setting up server...');
   const PORT = getEnv('PORT', 8080);
 
+  // Middleware to parse JSON bodies
   app.use(express.json());
 
+  // Health check route
   app.get('/', (req, res) => {
     res.send('Contacts API is running.');
   });
 
+  // Routes
   app.use('/contacts', contactsRouter);
 
   // 404 handler
@@ -26,6 +33,7 @@ export function setupServer() {
   // Error handler
   app.use(errorHandler);
 
+  // Start the server
   app.listen(PORT, () => {
     logger.info(`Server is running on ${PORT}`);
   });
