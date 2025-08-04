@@ -3,6 +3,7 @@ import cors from 'cors';
 import { getEnv } from './utils/getEnv.js';
 import { logger } from './utils/logger.js';
 import contactsRouter from './routes/contacts.js';
+import authRouter from './routes/auth.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 
@@ -26,6 +27,7 @@ export function setupServer() {
 
   // Routes
   app.use('/contacts', contactsRouter);
+  app.use('/auth', authRouter);
 
   // 404 handler
   app.use(notFoundHandler);
