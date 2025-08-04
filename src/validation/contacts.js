@@ -1,41 +1,4 @@
-import mongoose from 'mongoose';
 import Joi from 'joi';
-
-// Define the contact schema using Mongoose
-const contactSchema = new mongoose.Schema(
-  {
-    name: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    phoneNumber: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    email: {
-      type: String,
-      trim: true,
-    },
-    isFavourite: {
-      type: Boolean,
-      default: false,
-    },
-    contactType: {
-      type: String,
-      enum: ['work', 'home', 'personal'],
-      required: true,
-      default: 'personal',
-    },
-  },
-  {
-    versionKey: false,
-    timestamps: true,
-  },
-);
-
-export const Contact = mongoose.model('Contact', contactSchema);
 
 //Validation schemas for contact creation and update
 const stringField = Joi.string().min(3).max(20).trim();
@@ -51,6 +14,7 @@ export const createContactSchema = Joi.object({
     .default('personal'),
 });
 
+//Validation schema for updating contacts
 export const updateContactSchema = Joi.object({
   name: stringField,
   phoneNumber: stringField,

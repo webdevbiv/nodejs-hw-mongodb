@@ -1,4 +1,4 @@
-import { Contact } from '../validation/contacts.js';
+import { Contact } from '../models/contact.js';
 
 export const getAllContacts = async (
   skip = 0,
