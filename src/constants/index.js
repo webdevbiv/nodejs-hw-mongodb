@@ -9,8 +9,9 @@ export const HttpStatus = {
 // Standardized response messages
 export const Messages = {
   CONTACTS_FETCHED: 'Successfully found contacts!',
-  CONTACT_FOUND: (id) => `Successfully found contact with id ${id}!`,
-  CONTACT_NOT_FOUND: (id) => `Contact with ID ${id} not found`,
+  CONTACT_CREATED: 'Successfully created a contact!',
+  CONTACT_UPDATED: 'Successfully patched a contact!',
   INVALID_ID: (id) => `Invalid contact ID: ${id}`,
-  NOT_FOUND: 'Not found',
+  CONTACT_NOT_FOUND: (id) => `Contact with ID ${id} not found`,
+  CONTACT_FOUND: (id) => `Contact with ID ${id} found`,
 };
