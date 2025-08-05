@@ -118,3 +118,7 @@ export const refreshSession = async (oldRefreshToken) => {
 
   return { accessToken, refreshToken };
 };
+
+export const logoutSession = async (refreshToken) => {
+  await Session.findOneAndDelete({ refreshToken });
+};

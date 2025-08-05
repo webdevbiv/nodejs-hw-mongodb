@@ -1,4 +1,9 @@
-import { registerUser, loginUser, refreshSession } from '../services/auth.js';
+import {
+  registerUser,
+  loginUser,
+  refreshSession,
+  logoutSession,
+} from '../services/auth.js';
 import { HttpStatus, Messages } from '../constants/index.js';
 import { logger } from '../utils/logger.js';
 import { getEnv } from '../utils/getEnv.js';
@@ -97,6 +102,24 @@ export const refresh = async (req, res, next) => {
         message: Messages.SESSION_REFRESHED,
         data: { accessToken },
       });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const logout = async (req, res, next) => {
+  try {
+    const refreshToken = req.cookies?.refreshToken;
+
+    if (!refreshToken) {
+      logger.warn('[LOGOUT] No refreshToken found in cookies');
+      return res.sendStatus(HttpStatus.NO_CONTENT);
+    }
+
+    await logoutSession(refreshToken);
+
+    res.clearCookie('refreshToken');
+    res.sendStatus(HttpStatus.NO_CONTENT);
   } catch (error) {
     next(error);
   }
