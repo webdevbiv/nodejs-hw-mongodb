@@ -69,3 +69,52 @@ export const loginUser = async (email, password) => {
 
   return { accessToken, refreshToken };
 };
+
+export const refreshSession = async (oldRefreshToken) => {
+  let payload;
+
+  try {
+    payload = jwt.verify(oldRefreshToken, REFRESH_SECRET);
+  } catch {
+    throw createError(HttpStatus.UNAUTHORIZED, Messages.INVALID_REFRESH_TOKEN);
+  }
+
+  const existingSession = await Session.findOneAndDelete({
+    refreshToken: oldRefreshToken,
+  });
+
+  if (!existingSession) {
+    throw createError(HttpStatus.UNAUTHORIZED, Messages.INVALID_REFRESH_TOKEN);
+  }
+
+  const userId = payload.sub;
+  const user = await User.findById(userId);
+  if (!user) {
+    throw createError(HttpStatus.UNAUTHORIZED, Messages.USER_NOT_FOUND);
+  }
+
+  const accessToken = jwt.sign({ sub: user._id }, ACCESS_SECRET, {
+    expiresIn: ACCESS_TOKEN_EXPIRATION,
+  });
+
+  const refreshToken = jwt.sign({ sub: user._id }, REFRESH_SECRET, {
+    expiresIn: REFRESH_TOKEN_EXPIRATION,
+  });
+
+  const accessTokenValidUntil = new Date(
+    Date.now() + ms(ACCESS_TOKEN_EXPIRATION),
+  );
+  const refreshTokenValidUntil = new Date(
+    Date.now() + ms(REFRESH_TOKEN_EXPIRATION),
+  );
+
+  await Session.create({
+    userId: user._id,
+    accessToken,
+    refreshToken,
+    accessTokenValidUntil,
+    refreshTokenValidUntil,
+  });
+
+  return { accessToken, refreshToken };
+};

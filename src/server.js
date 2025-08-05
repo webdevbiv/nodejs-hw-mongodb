@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import { getEnv } from './utils/getEnv.js';
 import { logger } from './utils/logger.js';
 import contactsRouter from './routes/contacts.js';
@@ -12,6 +13,8 @@ const app = express();
 
 // Enable CORS for all routes
 app.use(cors());
+// Enable cookie parsing
+app.use(cookieParser());
 
 export function setupServer() {
   logger.info('Setting up server...');

@@ -19,4 +19,9 @@ export const Messages = {
   CONTACT_FOUND: (id) => `Contact with ID ${id} found`,
   USER_REGISTERED: 'Successfully registered a user!',
   EMAIL_IN_USE: 'Email in use',
+  USER_LOGGED_IN: 'Successfully logged in an user!',
+  SESSION_REFRESHED: 'Successfully refreshed a session!',
+  INVALID_CREDENTIALS: 'Invalid email or password',
+  INVALID_REFRESH_TOKEN: 'Invalid or expired refresh token',
+  USER_NOT_FOUND: 'User not found',
 };

@@ -1,4 +1,4 @@
-import { registerUser, loginUser } from '../services/auth.js';
+import { registerUser, loginUser, refreshSession } from '../services/auth.js';
 import { HttpStatus, Messages } from '../constants/index.js';
 import { logger } from '../utils/logger.js';
 import { getEnv } from '../utils/getEnv.js';
@@ -61,6 +61,40 @@ export const login = async (req, res, next) => {
       .json({
         status: 'success',
         message: Messages.USER_LOGGED_IN,
+        data: { accessToken },
+      });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const refresh = async (req, res, next) => {
+  try {
+    const oldRefreshToken = req.cookies?.refreshToken;
+
+    if (!oldRefreshToken) {
+      return res.status(HttpStatus.UNAUTHORIZED).json({
+        status: 'error',
+        code: HttpStatus.UNAUTHORIZED,
+        message: 'Refresh token not found in cookies',
+      });
+    }
+
+    const { accessToken, refreshToken } = await refreshSession(oldRefreshToken);
+
+    const refreshExpiration = getEnv('REFRESH_TOKEN_EXPIRATION', '30d');
+    const maxAge = ms(refreshExpiration);
+
+    res
+      .cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        sameSite: 'strict',
+        maxAge,
+      })
+      .status(HttpStatus.OK)
+      .json({
+        status: 'success',
+        message: Messages.SESSION_REFRESHED,
         data: { accessToken },
       });
   } catch (error) {
