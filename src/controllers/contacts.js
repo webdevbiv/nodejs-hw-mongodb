@@ -22,7 +22,7 @@ export const handleGetAllContacts = async (req, res) => {
   const sortOrder = req.query.sortOrder === 'desc' ? -1 : 1;
   const sortOptions = { [sortBy]: sortOrder };
 
-  const filter = {};
+  const filter = { userId: req.user._id };
 
   if (req.query.type) {
     filter.contactType = req.query.type;
@@ -71,7 +71,7 @@ export const handleGetContactById = async (req, res) => {
     throw createError(HttpStatus.BAD_REQUEST, Messages.INVALID_ID(contactId));
   }
 
-  const contact = await getContactById(contactId);
+  const contact = await getContactById(contactId, req.user._id);
 
   if (!contact) {
     logger.warn(`[GET] /contacts/${contactId} -> Not found`);
@@ -92,7 +92,7 @@ export const handleGetContactById = async (req, res) => {
 };
 
 export const handleCreateContact = async (req, res) => {
-  const newContact = await createContact(req.body);
+  const newContact = await createContact({ ...req.body, userId: req.user._id });
 
   logger.info(`[POST] /contacts -> Created contact ${newContact._id}`);
 
@@ -112,7 +112,7 @@ export const handlePatchContact = async (req, res) => {
     throw createError(HttpStatus.BAD_REQUEST, Messages.INVALID_ID(contactId));
   }
 
-  const updated = await updateContact(contactId, req.body);
+  const updated = await updateContact(contactId, req.body, req.user._id);
 
   if (!updated) {
     logger.warn(`[PATCH] /contacts/${contactId} -> Not found`);
@@ -141,7 +141,7 @@ export const handleDeleteContact = async (req, res) => {
     throw createError(HttpStatus.BAD_REQUEST, Messages.INVALID_ID(contactId));
   }
 
-  const deleted = await deleteContact(contactId);
+  const deleted = await deleteContact(contactId, req.user._id);
 
   if (!deleted) {
     logger.warn(`[DELETE] /contacts/${contactId} -> Not found`);

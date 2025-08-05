@@ -13,11 +13,13 @@ export const getContactsCount = async (filter = {}) => {
   return Contact.countDocuments(filter);
 };
 
-export const getContactById = (id) => Contact.findById(id);
+export const getContactById = (id, userId) =>
+  Contact.findOne({ _id: id, userId });
 
 export const createContact = (contactData) => Contact.create(contactData);
 
-export const updateContact = (id, updateData) =>
-  Contact.findByIdAndUpdate(id, updateData, { new: true });
+export const updateContact = (id, updateData, userId) =>
+  Contact.findOneAndUpdate({ _id: id, userId }, updateData, { new: true });
 
-export const deleteContact = (id) => Contact.findByIdAndDelete(id);
+export const deleteContact = (id, userId) =>
+  Contact.findOneAndDelete({ _id: id, userId });
