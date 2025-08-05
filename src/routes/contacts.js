@@ -15,8 +15,11 @@ import {
 } from '../validation/contacts.js';
 import { validateQuery } from '../middlewares/validateQuery.js';
 import { getContactsQuerySchema } from '../validation/query.js';
+import { authenticate } from '../middlewares/authenticate.js';
 
 const router = express.Router();
+
+router.use(authenticate);
 
 router.get(
   '/',
