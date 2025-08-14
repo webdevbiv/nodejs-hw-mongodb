@@ -122,3 +122,7 @@ export const refreshSession = async (oldRefreshToken) => {
 export const logoutSession = async (refreshToken) => {
   await Session.findOneAndDelete({ refreshToken });
 };
+
+export const removeUserSessions = async (userId) => {
+  await Session.deleteMany({ userId });
+};

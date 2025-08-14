@@ -1,3 +1,4 @@
+// src/validation/auth.js
 import Joi from 'joi';
 
 export const registerSchema = Joi.object({
@@ -21,6 +22,28 @@ export const loginSchema = Joi.object({
     'any.required': `"email" is required`,
   }),
   password: Joi.string().required().messages({
+    'any.required': `"password" is required`,
+  }),
+});
+
+export const sendResetEmailSchema = Joi.object({
+  email: Joi.string()
+    .trim()
+    .lowercase()
+    .email({ tlds: { allow: false } })
+    .required()
+    .messages({
+      'string.email': `"email" must be a valid email`,
+      'any.required': `"email" is required`,
+    }),
+});
+
+export const resetPwdSchema = Joi.object({
+  token: Joi.string().trim().required().messages({
+    'any.required': `"token" is required`,
+  }),
+  password: Joi.string().min(6).required().messages({
+    'string.min': `"password" should be at least 6 characters`,
     'any.required': `"password" is required`,
   }),
 });
