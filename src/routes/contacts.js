@@ -1,3 +1,4 @@
+// src/routes/contacts.js
 import express from 'express';
 import {
   handleGetAllContacts,
@@ -16,21 +17,27 @@ import {
 import { validateQuery } from '../middlewares/validateQuery.js';
 import { getContactsQuerySchema } from '../validation/query.js';
 import { authenticate } from '../middlewares/authenticate.js';
+import { uploadPhoto } from '../middlewares/upload.js';
+import { photoMarker } from '../middlewares/photoMarker.js';
 
 const router = express.Router();
 
 router.use(authenticate);
 
+// GET list
 router.get(
   '/',
   validateQuery(getContactsQuerySchema),
   ctrlWrapper(handleGetAllContacts),
 );
 
+// GET by id
 router.get('/:contactId', isValidId, ctrlWrapper(handleGetContactById));
 
+// POST create (supports multipart/form-data with "photo")
 router.post(
   '/',
+  uploadPhoto,
   validateBody(createContactSchema),
   ctrlWrapper(handleCreateContact),
 );
@@ -38,6 +45,8 @@ router.post(
 router.patch(
   '/:contactId',
   isValidId,
+  uploadPhoto,
+  photoMarker,
   validateBody(updateContactSchema),
   ctrlWrapper(handlePatchContact),
 );

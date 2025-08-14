@@ -16,9 +16,10 @@ export const createContactSchema = Joi.object({
 
 //Validation schema for updating contacts
 export const updateContactSchema = Joi.object({
-  name: stringField,
-  phoneNumber: stringField,
-  email: Joi.string().email().trim(),
+  name: Joi.string(),
+  phoneNumber: Joi.string(),
+  email: Joi.string().email(),
   isFavourite: Joi.boolean(),
   contactType: Joi.string().valid('work', 'home', 'personal'),
+  photo: Joi.any(),
 }).min(1);

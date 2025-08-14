@@ -1,25 +1,60 @@
-import { Contact } from '../models/contact.js';
+import express from 'express';
+import {
+  listContacts,
+  getContactById,
+  createContact,
+  removeContact,
+  updateContact,
+  updateStatusContact,
+} from '../controllers/contacts.js';
+import { authenticate } from '../middlewares/authenticate.js';
+import { isValidId } from '../middlewares/isValidId.js';
+import { validateBody } from '../middlewares/validateBody.js';
+import {
+  createContactSchema,
+  updateContactSchema,
+  updateStatusSchema,
+} from '../validation/contacts.js';
+import { ctrlWrapper } from '../utils/ctrlWrapper.js';
+import { uploadPhoto } from '../middlewares/upload.js';
 
-export const getAllContacts = async (
-  skip = 0,
-  limit = 10,
-  sort = {},
-  filter = {},
-) => {
-  return Contact.find(filter).skip(skip).limit(limit).sort(sort);
-};
+const router = express.Router();
 
-export const getContactsCount = async (filter = {}) => {
-  return Contact.countDocuments(filter);
-};
+// All contacts routes are protected
+router.use(authenticate);
 
-export const getContactById = (id, userId) =>
-  Contact.findOne({ _id: id, userId });
+// Get list
+router.get('/', ctrlWrapper(listContacts));
 
-export const createContact = (contactData) => Contact.create(contactData);
+// Get by id
+router.get('/:contactId', isValidId, ctrlWrapper(getContactById));
 
-export const updateContact = (id, updateData, userId) =>
-  Contact.findOneAndUpdate({ _id: id, userId }, updateData, { new: true });
+// Create contact
+router.post(
+  '/',
+  uploadPhoto,
+  validateBody(createContactSchema),
+  ctrlWrapper(createContact),
+);
 
-export const deleteContact = (id, userId) =>
-  Contact.findOneAndDelete({ _id: id, userId });
+// Delete
+router.delete('/:contactId', isValidId, ctrlWrapper(removeContact));
+
+// Update contact
+router.patch(
+  '//:contactId',
+  isValidId,
+  uploadPhoto,
+  validateBody(updateContactSchema),
+  ctrlWrapper(updateContact),
+);
+
+// Update status
+router.patch(
+  '/:contactId/favorite',
+  isValidId,
+  validateBody(updateStatusSchema),
+  ctrlWrapper(updateStatusContact),
+);
+
+export default router;

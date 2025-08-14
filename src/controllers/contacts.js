@@ -1,158 +1,190 @@
-import mongoose from 'mongoose';
+// src/controllers/contacts.js
+import path from 'node:path';
+import os from 'node:os';
+import { promises as fs } from 'node:fs';
+
 import createError from 'http-errors';
+import mongoose from 'mongoose';
 
-import {
-  getContactById,
-  createContact,
-  updateContact,
-  deleteContact,
-  getAllContacts,
-  getContactsCount,
-} from '../services/contacts.js';
-
+import { Contact } from '../models/contact.js';
 import { HttpStatus, Messages } from '../constants/index.js';
-import { logger } from '../utils/logger.js';
+import { uploadToCloudinary } from '../services/cloudinary.js';
 
-export const handleGetAllContacts = async (req, res) => {
-  const page = parseInt(req.query.page) || 1;
-  const perPage = parseInt(req.query.perPage) || 10;
-  const skip = (page - 1) * perPage;
-
-  const sortBy = req.query.sortBy || 'name';
-  const sortOrder = req.query.sortOrder === 'desc' ? -1 : 1;
-  const sortOptions = { [sortBy]: sortOrder };
-
-  const filter = { userId: req.user._id };
-
-  if (req.query.type) {
-    filter.contactType = req.query.type;
+async function uploadMulterFileToCloudinary(file) {
+  if (!file) return null;
+  const tmpPath = path.join(os.tmpdir(), `${Date.now()}-${file.originalname}`);
+  await fs.writeFile(tmpPath, file.buffer);
+  try {
+    const url = await uploadToCloudinary(tmpPath);
+    return url;
+  } finally {
+    fs.unlink(tmpPath).catch(() => {});
   }
+}
 
-  if (req.query.isFavourite !== undefined) {
-    filter.isFavourite = req.query.isFavourite === 'true';
-  }
-
-  logger.info(
-    `[GET] /contacts -> page=${page}, perPage=${perPage}, sortBy=${sortBy}, sortOrder=${
-      req.query.sortOrder || 'asc'
-    }, filter=${JSON.stringify(filter)}`,
-  );
-
-  const [totalItems, contacts] = await Promise.all([
-    getContactsCount(filter),
-    getAllContacts(skip, perPage, sortOptions, filter),
-  ]);
-
-  const totalPages = Math.ceil(totalItems / perPage);
-
-  logger.info(`[GET] /contacts -> Returned ${contacts.length} contacts`);
-
-  res.status(HttpStatus.OK).json({
-    status: HttpStatus.OK,
-    message: Messages.CONTACTS_FETCHED,
-    data: {
+export const handleGetAllContacts = async (req, res, next) => {
+  try {
+    const contacts = await Contact.find({ userId: req.user._id });
+    res.status(HttpStatus.OK).json({
+      status: 'success',
+      message: Messages.CONTACTS_FETCHED,
       data: contacts,
-      page,
-      perPage,
-      totalItems,
-      totalPages,
-      hasPreviousPage: page > 1,
-      hasNextPage: page < totalPages,
-    },
-  });
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
-export const handleGetContactById = async (req, res) => {
-  const { contactId } = req.params;
+export const handleGetContactById = async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
 
-  if (!mongoose.isValidObjectId(contactId)) {
-    logger.warn(`[GET] /contacts/${contactId} -> Invalid ID`);
+    if (!mongoose.isValidObjectId(contactId)) {
+      throw createError(HttpStatus.BAD_REQUEST, Messages.INVALID_ID(contactId));
+    }
 
-    throw createError(HttpStatus.BAD_REQUEST, Messages.INVALID_ID(contactId));
+    const contact = await Contact.findOne({
+      _id: contactId,
+      userId: req.user._id,
+    });
+
+    if (!contact) {
+      throw createError(
+        HttpStatus.NOT_FOUND,
+        Messages.CONTACT_NOT_FOUND(contactId),
+      );
+    }
+
+    res.status(HttpStatus.OK).json({
+      status: 'success',
+      message: Messages.CONTACT_FETCHED(contactId),
+      data: contact,
+    });
+  } catch (error) {
+    next(error);
   }
+};
 
-  const contact = await getContactById(contactId, req.user._id);
+export const handleCreateContact = async (req, res, next) => {
+  try {
+    const { name, phoneNumber, email, isFavourite, contactType } = req.body;
 
-  if (!contact) {
-    logger.warn(`[GET] /contacts/${contactId} -> Not found`);
+    let photoUrl = null;
+    if (req.file) {
+      photoUrl = await uploadMulterFileToCloudinary(req.file);
+    }
 
-    throw createError(
-      HttpStatus.NOT_FOUND,
-      Messages.CONTACT_NOT_FOUND(contactId),
+    const contact = await Contact.create({
+      name,
+      phoneNumber,
+      email,
+      isFavourite,
+      contactType,
+      userId: req.user._id,
+      photo: photoUrl,
+    });
+
+    res.status(HttpStatus.CREATED).json({
+      status: 'success',
+      message: Messages.CONTACT_CREATED,
+      data: contact,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const handleDeleteContact = async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+
+    if (!mongoose.isValidObjectId(contactId)) {
+      throw createError(HttpStatus.BAD_REQUEST, Messages.INVALID_ID(contactId));
+    }
+
+    const deleted = await Contact.findOneAndDelete({
+      _id: contactId,
+      userId: req.user._id,
+    });
+
+    if (!deleted) {
+      throw createError(
+        HttpStatus.NOT_FOUND,
+        Messages.CONTACT_NOT_FOUND(contactId),
+      );
+    }
+
+    res.sendStatus(HttpStatus.NO_CONTENT);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const handlePatchContact = async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+
+    if (!mongoose.isValidObjectId(contactId)) {
+      throw createError(HttpStatus.BAD_REQUEST, Messages.INVALID_ID(contactId));
+    }
+
+    const update = { ...req.body };
+
+    if (req.file) {
+      const photoUrl = await uploadMulterFileToCloudinary(req.file);
+      update.photo = photoUrl;
+    }
+
+    const updated = await Contact.findOneAndUpdate(
+      { _id: contactId, userId: req.user._id },
+      update,
+      { new: true },
     );
+
+    if (!updated) {
+      throw createError(
+        HttpStatus.NOT_FOUND,
+        Messages.CONTACT_NOT_FOUND(contactId),
+      );
+    }
+
+    res.status(HttpStatus.OK).json({
+      status: 'success',
+      message: Messages.CONTACT_UPDATED,
+      data: updated,
+    });
+  } catch (error) {
+    next(error);
   }
-
-  logger.info(`[GET] /contacts/${contactId} -> Found`);
-
-  res.status(HttpStatus.OK).json({
-    status: HttpStatus.OK,
-    message: Messages.CONTACT_FOUND(contactId),
-    data: contact,
-  });
 };
 
-export const handleCreateContact = async (req, res) => {
-  const newContact = await createContact({ ...req.body, userId: req.user._id });
+export const handleUpdateStatusContact = async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
 
-  logger.info(`[POST] /contacts -> Created contact ${newContact._id}`);
+    if (!mongoose.isValidObjectId(contactId)) {
+      throw createError(HttpStatus.BAD_REQUEST, Messages.INVALID_ID(contactId));
+    }
 
-  res.status(HttpStatus.CREATED).json({
-    status: HttpStatus.CREATED,
-    message: Messages.CONTACT_CREATED,
-    data: newContact,
-  });
-};
-
-export const handlePatchContact = async (req, res) => {
-  const { contactId } = req.params;
-
-  if (!mongoose.isValidObjectId(contactId)) {
-    logger.warn(`[PATCH] /contacts/${contactId} -> Invalid ID`);
-
-    throw createError(HttpStatus.BAD_REQUEST, Messages.INVALID_ID(contactId));
-  }
-
-  const updated = await updateContact(contactId, req.body, req.user._id);
-
-  if (!updated) {
-    logger.warn(`[PATCH] /contacts/${contactId} -> Not found`);
-
-    throw createError(
-      HttpStatus.NOT_FOUND,
-      Messages.CONTACT_NOT_FOUND(contactId),
+    const updated = await Contact.findOneAndUpdate(
+      { _id: contactId, userId: req.user._id },
+      { isFavourite: req.body.isFavourite },
+      { new: true },
     );
+
+    if (!updated) {
+      throw createError(
+        HttpStatus.NOT_FOUND,
+        Messages.CONTACT_NOT_FOUND(contactId),
+      );
+    }
+
+    res.status(HttpStatus.OK).json({
+      status: 'success',
+      message: Messages.CONTACT_UPDATED,
+      data: updated,
+    });
+  } catch (error) {
+    next(error);
   }
-
-  logger.info(`[PATCH] /contacts/${contactId} -> Updated`);
-
-  res.status(HttpStatus.OK).json({
-    status: HttpStatus.OK,
-    message: Messages.CONTACT_UPDATED,
-    data: updated,
-  });
-};
-
-export const handleDeleteContact = async (req, res) => {
-  const { contactId } = req.params;
-
-  if (!mongoose.isValidObjectId(contactId)) {
-    logger.warn(`[DELETE] /contacts/${contactId} -> Invalid ID`);
-
-    throw createError(HttpStatus.BAD_REQUEST, Messages.INVALID_ID(contactId));
-  }
-
-  const deleted = await deleteContact(contactId, req.user._id);
-
-  if (!deleted) {
-    logger.warn(`[DELETE] /contacts/${contactId} -> Not found`);
-
-    throw createError(
-      HttpStatus.NOT_FOUND,
-      Messages.CONTACT_NOT_FOUND(contactId),
-    );
-  }
-
-  logger.info(`[DELETE] /contacts/${contactId} -> Deleted`);
-
-  res.sendStatus(HttpStatus.NO_CONTENT);
 };
