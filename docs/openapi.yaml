@@ -1,42 +1,50 @@
 # docs/openapi.yaml
 openapi: 3.0.3
+
 info:
-  title: Contacts API (HW-07)
-  version: 1.0.0
-  description: REST API for auth and contacts CRUD with optional photo upload.
+  title: 'Contacts API (HW-07)'
+  version: '1.0.0'
+  description: 'REST API for auth and contacts CRUD with optional photo upload.'
   license:
-    name: MIT
-    url: https://opensource.org/licenses/MIT
+    name: 'MIT'
+    url: 'https://opensource.org/licenses/MIT'
 
+# Where this API can be reached
 servers:
-  - url: https://<your-render-app>.onrender.com
-    description: Production (Render)
-  - url: http://localhost:8080
-    description: Local
+  - url: 'https://<your-render-app>.onrender.com'
+    description: 'Production (Render)'
+  - url: 'http://localhost:8080'
+    description: 'Local'
 
+# High-level groups for endpoints
 tags:
-  - name: System
-    description: Health and service metadata
-  - name: Auth
-    description: User authentication and session management
-  - name: Contacts
-    description: CRUD for contacts and photo upload
+  - name: 'System'
+    description: 'Health and service metadata'
+  - name: 'Auth'
+    description: 'User authentication and session management'
+  - name: 'Contacts'
+    description: 'CRUD for contacts and photo upload'
 
 paths:
-  /:
-    $ref: ./swagger/paths/system.root.yaml
-  /auth/register:
-    $ref: ./swagger/paths/auth.register.yaml
-  /auth/login:
-    $ref: ./swagger/paths/auth.login.yaml
-  /auth/refresh:
-    $ref: ./swagger/paths/auth.refresh.yaml
-  /auth/logout:
-    $ref: ./swagger/paths/auth.logout.yaml
-  /contacts:
-    $ref: ./swagger/paths/contacts.yaml
-  /contacts/{contactId}:
-    $ref: ./swagger/paths/contacts.id.yaml
+  # Root/health or service info
+  '/':
+    $ref: './swagger/paths/system.root.yaml'
+
+  # Auth
+  '/auth/register':
+    $ref: './swagger/paths/auth.register.yaml'
+  '/auth/login':
+    $ref: './swagger/paths/auth.login.yaml'
+  '/auth/refresh':
+    $ref: './swagger/paths/auth.refresh.yaml'
+  '/auth/logout':
+    $ref: './swagger/paths/auth.logout.yaml'
+
+  # Contacts
+  '/contacts':
+    $ref: './swagger/paths/contacts.yaml'
+  '/contacts/{contactId}':
+    $ref: './swagger/paths/contacts.id.yaml'
 
 components:
   securitySchemes:
@@ -46,16 +54,23 @@ components:
       bearerFormat: JWT
 
   schemas:
-    User: { $ref: ./swagger/components/schemas/User.yaml }
-    RegisterBody: { $ref: ./swagger/components/schemas/RegisterBody.yaml }
-    LoginBody: { $ref: ./swagger/components/schemas/LoginBody.yaml }
-    AuthResponse: { $ref: ./swagger/components/schemas/AuthResponse.yaml }
-    Contact: { $ref: ./swagger/components/schemas/Contact.yaml }
+    User:
+      $ref: './swagger/components/schemas/User.yaml'
+    RegisterBody:
+      $ref: './swagger/components/schemas/RegisterBody.yaml'
+    LoginBody:
+      $ref: './swagger/components/schemas/LoginBody.yaml'
+    AuthResponse:
+      $ref: './swagger/components/schemas/AuthResponse.yaml'
+    Contact:
+      $ref: './swagger/components/schemas/Contact.yaml'
     CreateContactJSON:
-      { $ref: ./swagger/components/schemas/CreateContactJSON.yaml }
+      $ref: './swagger/components/schemas/CreateContactJSON.yaml'
     UpdateContactJSON:
-      { $ref: ./swagger/components/schemas/UpdateContactJSON.yaml }
-    SuccessBase: { $ref: ./swagger/components/schemas/SuccessBase.yaml }
+      $ref: './swagger/components/schemas/UpdateContactJSON.yaml'
+    SuccessBase:
+      $ref: './swagger/components/schemas/SuccessBase.yaml'
 
   responses:
-    Error: { $ref: ./swagger/components/responses/Error.yaml }
+    Error:
+      $ref: './swagger/components/responses/Error.yaml'

@@ -40,3 +40,8 @@ Thumbs.db
 .idea/
 *.sublime-workspace
 *.sublime-project
+
+# cspell
+cspell.json
+cspell.config.json
+.cspell/
