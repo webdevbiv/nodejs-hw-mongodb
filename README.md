@@ -19,9 +19,9 @@ Minimal REST API for auth and contacts with file uploads. This branch (`hw7-swag
 
 ### Local (example)
 
-- Swagger UI: http://localhost:3000/api-docs
-- YAML: http://localhost:3000/docs/openapi.yaml
-- JSON: http://localhost:3000/docs/swagger.json
+- Swagger UI: https://contacts-xxm3.onrender.com/api-docs
+- YAML: https://contacts-xxm3.onrender.com/docs/openapi.yaml
+- JSON: https://contacts-xxm3.onrender.com/docs/swagger.json
 
 ### Production (Render)
 
