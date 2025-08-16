@@ -3,20 +3,29 @@ type: object
 required:
   - name
   - email
-  - phone
+  - phoneNumber
 properties:
   name:
     type: string
     minLength: 2
     maxLength: 128
-    example: John Doe
+    example: 'Alice Test'
   email:
     type: string
     format: email
-    example: john@example.com
-  phone:
+    example: 'alice@example.com'
+  phoneNumber:
     type: string
-    example: '+380501112233'
-  favorite:
+    example: '+380501234567'
+  isFavourite:
     type: boolean
     default: false
+    example: true
+  contactType:
+    type: string
+    example: 'work'
+  photo:
+    type: string
+    format: uri
+    nullable: true
+    description: Optional direct URL; usually set by server after file upload

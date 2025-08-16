@@ -6,19 +6,22 @@ properties:
     type: string
     minLength: 2
     maxLength: 128
-    example: Johnathan Doe
+    example: 'Alice Test'
   email:
     type: string
     format: email
-    example: john.new@example.com
-  phone:
+    example: 'alice@example.com'
+  phoneNumber:
     type: string
-    example: '+380501112299'
-  favorite:
+    example: '+380500000000'
+  isFavourite:
     type: boolean
     example: true
+  contactType:
+    type: string
+    example: 'work'
   photo:
     type: string
+    format: uri
     nullable: true
-    description: >
-      Optional direct URL to a photo (usually set by the server after multipart upload).
+    description: Optional direct URL (usually set by the server after multipart upload)

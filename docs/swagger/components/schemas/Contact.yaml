@@ -1,36 +1,53 @@
 # docs/swagger/components/schemas/Contact.yaml
 type: object
 description: Contact entity with optional hosted photo URL.
-required: [_id, name, email, phone, createdAt, updatedAt]
+required: [_id, name, email, phoneNumber, createdAt, updatedAt]
+additionalProperties: false
 properties:
   _id:
     type: string
     description: Mongo ObjectId
+    pattern: '^[a-f0-9]{24}$'
+    readOnly: true
     example: '66b2f0c0c5a0d94d2b8c5678'
   name:
     type: string
-    example: John Doe
+    example: 'Alice Test'
   email:
     type: string
     format: email
-    example: john@example.com
-  phone:
+    example: 'alice@example.com'
+  phoneNumber:
     type: string
-    example: '+380501112233'
-  favorite:
+    description: International phone in E.164 or similar format
+    example: '+380501234567'
+  isFavourite:
     type: boolean
     default: false
-    example: false
+    example: true
+  contactType:
+    type: string
+    description: Arbitrary label for the contact (e.g., work/home)
+    example: 'work'
   photo:
     type: string
+    format: uri
     nullable: true
     description: Public URL to contact photo (e.g., Cloudinary)
     example: 'https://res.cloudinary.com/demo/image/upload/sample.jpg'
+  userId:
+    type: string
+    description: Owner user id (Mongo ObjectId)
+    pattern: '^[a-f0-9]{24}$'
+    readOnly: true
+    example: '6698c7360e59d8758205404f'
   createdAt:
     type: string
     format: date-time
-    example: '2025-08-16T09:15:27.000Z'
+    readOnly: true
+    example: '2025-08-14T19:10:04.073Z'
   updatedAt:
     type: string
     format: date-time
-    example: '2025-08-16T09:15:27.000Z'
+    readOnly: true
+    example: '2025-08-14T19:34:07.478Z'

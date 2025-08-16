@@ -11,11 +11,11 @@
   },
   "servers": [
     {
-      "url": "https://contacts-xxm3.onrender.com",
+      "url": "https://<your-render-app>.onrender.com",
       "description": "Production (Render)"
     },
     {
-      "url": "http://localhost:3000",
+      "url": "http://localhost:8080",
       "description": "Local"
     }
   ],
@@ -36,7 +36,9 @@
   "paths": {
     "/": {
       "get": {
-        "tags": ["System"],
+        "tags": [
+          "System"
+        ],
         "summary": "Health check",
         "operationId": "healthCheck",
         "security": [],
@@ -60,7 +62,9 @@
     },
     "/auth/register": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Register a user",
         "operationId": "registerUser",
         "security": [],
@@ -117,7 +121,9 @@
     },
     "/auth/login": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Login and get tokens",
         "operationId": "loginUser",
         "security": [],
@@ -177,7 +183,9 @@
     },
     "/auth/refresh": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Refresh session using refresh token",
         "operationId": "refreshSession",
         "description": "Uses HTTP-only refresh token cookie to issue new access/refresh tokens.",
@@ -217,7 +225,9 @@
     },
     "/auth/logout": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Logout (invalidate session)",
         "operationId": "logoutUser",
         "security": [
@@ -240,7 +250,9 @@
     },
     "/contacts": {
       "get": {
-        "tags": ["Contacts"],
+        "tags": [
+          "Contacts"
+        ],
         "summary": "List contacts",
         "operationId": "listContacts",
         "security": [
@@ -251,11 +263,11 @@
         "parameters": [
           {
             "in": "query",
-            "name": "favorite",
+            "name": "isFavourite",
             "schema": {
               "type": "boolean"
             },
-            "description": "Filter by favorite flag"
+            "description": "Filter by favourite flag"
           },
           {
             "in": "query",
@@ -308,23 +320,27 @@
                       "data": [
                         {
                           "_id": "66b2f0c0c5a0d94d2b8c5678",
-                          "name": "John Doe",
-                          "email": "john@example.com",
-                          "phone": "+380501112233",
-                          "favorite": false,
-                          "photo": null,
-                          "createdAt": "2025-08-16T09:15:27.000Z",
-                          "updatedAt": "2025-08-16T09:15:27.000Z"
+                          "name": "Alice Test",
+                          "email": "alice@example.com",
+                          "phoneNumber": "+380501234567",
+                          "isFavourite": true,
+                          "contactType": "work",
+                          "photo": "https://res.cloudinary.com/demo/image/upload/sample.jpg",
+                          "userId": "6698c7360e59d8758205404f",
+                          "createdAt": "2025-08-14T19:10:04.073Z",
+                          "updatedAt": "2025-08-14T19:34:07.478Z"
                         },
                         {
                           "_id": "66b2f0c0c5a0d94d2b8c5679",
-                          "name": "Jane Smith",
-                          "email": "jane@example.com",
-                          "phone": "+380971112233",
-                          "favorite": true,
-                          "photo": "https://res.cloudinary.com/demo/image/upload/sample.jpg",
-                          "createdAt": "2025-08-16T10:12:05.000Z",
-                          "updatedAt": "2025-08-16T10:12:05.000Z"
+                          "name": "Bob",
+                          "email": "bob@example.com",
+                          "phoneNumber": "+380971112233",
+                          "isFavourite": false,
+                          "contactType": "home",
+                          "photo": null,
+                          "userId": "6698c7360e59d8758205404f",
+                          "createdAt": "2025-08-15T12:19:59.205Z",
+                          "updatedAt": "2025-08-15T12:19:59.205Z"
                         }
                       ]
                     }
@@ -342,7 +358,9 @@
         }
       },
       "post": {
-        "tags": ["Contacts"],
+        "tags": [
+          "Contacts"
+        ],
         "summary": "Create contact (JSON or multipart)",
         "operationId": "createContact",
         "description": "Accepts JSON or multipart/form-data with a `photo` file. If a file is provided, the server uploads it (e.g., to Cloudinary) and stores the URL.\n",
@@ -361,10 +379,11 @@
               "examples": {
                 "sample": {
                   "value": {
-                    "name": "John Doe",
-                    "email": "john@example.com",
-                    "phone": "+380501112233",
-                    "favorite": false
+                    "name": "Alice Test",
+                    "email": "alice@example.com",
+                    "phoneNumber": "+380501234567",
+                    "isFavourite": true,
+                    "contactType": "work"
                   }
                 }
               }
@@ -372,19 +391,27 @@
             "multipart/form-data": {
               "schema": {
                 "type": "object",
-                "required": ["name", "email", "phone"],
+                "required": [
+                  "name",
+                  "email",
+                  "phoneNumber"
+                ],
                 "properties": {
                   "name": {
                     "type": "string"
                   },
                   "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "phoneNumber": {
                     "type": "string"
                   },
-                  "phone": {
-                    "type": "string"
-                  },
-                  "favorite": {
+                  "isFavourite": {
                     "type": "boolean"
+                  },
+                  "contactType": {
+                    "type": "string"
                   },
                   "photo": {
                     "type": "string",
@@ -423,11 +450,13 @@
                       "message": "Successfully created a contact!",
                       "data": {
                         "_id": "66b2f0c0c5a0d94d2b8c5680",
-                        "name": "John Doe",
-                        "email": "john@example.com",
-                        "phone": "+380501112233",
-                        "favorite": false,
-                        "photo": null,
+                        "name": "Alice Test",
+                        "email": "alice@example.com",
+                        "phoneNumber": "+380501234567",
+                        "isFavourite": true,
+                        "contactType": "work",
+                        "photo": "https://res.cloudinary.com/demo/image/upload/sample.jpg",
+                        "userId": "6698c7360e59d8758205404f",
                         "createdAt": "2025-08-16T11:03:44.000Z",
                         "updatedAt": "2025-08-16T11:03:44.000Z"
                       }
@@ -459,7 +488,9 @@
         }
       ],
       "get": {
-        "tags": ["Contacts"],
+        "tags": [
+          "Contacts"
+        ],
         "summary": "Get contact by id",
         "operationId": "getContactById",
         "security": [
@@ -494,13 +525,15 @@
                       "message": "Contact with ID 66b2f0c0c5a0d94d2b8c5678 found",
                       "data": {
                         "_id": "66b2f0c0c5a0d94d2b8c5678",
-                        "name": "John Doe",
-                        "email": "john@example.com",
-                        "phone": "+380501112233",
-                        "favorite": false,
-                        "photo": null,
-                        "createdAt": "2025-08-16T09:15:27.000Z",
-                        "updatedAt": "2025-08-16T09:15:27.000Z"
+                        "name": "Alice Test",
+                        "email": "alice@example.com",
+                        "phoneNumber": "+380501234567",
+                        "isFavourite": true,
+                        "contactType": "work",
+                        "photo": "https://res.cloudinary.com/demo/image/upload/sample.jpg",
+                        "userId": "6698c7360e59d8758205404f",
+                        "createdAt": "2025-08-14T19:10:04.073Z",
+                        "updatedAt": "2025-08-14T19:34:07.478Z"
                       }
                     }
                   }
@@ -520,7 +553,9 @@
         }
       },
       "patch": {
-        "tags": ["Contacts"],
+        "tags": [
+          "Contacts"
+        ],
         "summary": "Update contact (JSON or multipart)",
         "operationId": "updateContact",
         "description": "Accepts JSON fields and/or multipart/form-data with a `photo` file to replace the existing contact photo.\n",
@@ -545,13 +580,17 @@
                     "type": "string"
                   },
                   "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "phoneNumber": {
                     "type": "string"
                   },
-                  "phone": {
-                    "type": "string"
-                  },
-                  "favorite": {
+                  "isFavourite": {
                     "type": "boolean"
+                  },
+                  "contactType": {
+                    "type": "string"
                   },
                   "photo": {
                     "type": "string",
@@ -590,12 +629,14 @@
                       "message": "Successfully patched a contact!",
                       "data": {
                         "_id": "66b2f0c0c5a0d94d2b8c5678",
-                        "name": "Johnathan Doe",
-                        "email": "john.new@example.com",
-                        "phone": "+380501112299",
-                        "favorite": true,
+                        "name": "Alice Test",
+                        "email": "alice@example.com",
+                        "phoneNumber": "+380500000000",
+                        "isFavourite": true,
+                        "contactType": "work",
                         "photo": "https://res.cloudinary.com/demo/image/upload/sample.jpg",
-                        "createdAt": "2025-08-16T09:15:27.000Z",
+                        "userId": "6698c7360e59d8758205404f",
+                        "createdAt": "2025-08-14T19:10:04.073Z",
                         "updatedAt": "2025-08-16T12:45:10.000Z"
                       }
                     }
@@ -616,7 +657,9 @@
         }
       },
       "delete": {
-        "tags": ["Contacts"],
+        "tags": [
+          "Contacts"
+        ],
         "summary": "Delete contact",
         "operationId": "deleteContact",
         "security": [
@@ -653,7 +696,13 @@
       "User": {
         "type": "object",
         "description": "Public user representation returned by the API.",
-        "required": ["_id", "name", "email", "createdAt", "updatedAt"],
+        "required": [
+          "_id",
+          "name",
+          "email",
+          "createdAt",
+          "updatedAt"
+        ],
         "additionalProperties": false,
         "properties": {
           "_id": {
@@ -696,7 +745,11 @@
       },
       "RegisterBody": {
         "type": "object",
-        "required": ["name", "email", "password"],
+        "required": [
+          "name",
+          "email",
+          "password"
+        ],
         "properties": {
           "name": {
             "type": "string",
@@ -719,7 +772,10 @@
       },
       "LoginBody": {
         "type": "object",
-        "required": ["email", "password"],
+        "required": [
+          "email",
+          "password"
+        ],
         "properties": {
           "email": {
             "type": "string",
@@ -736,7 +792,10 @@
       },
       "AuthResponse": {
         "type": "object",
-        "required": ["accessToken", "user"],
+        "required": [
+          "accessToken",
+          "user"
+        ],
         "properties": {
           "accessToken": {
             "type": "string"
@@ -753,71 +812,112 @@
       "Contact": {
         "type": "object",
         "description": "Contact entity with optional hosted photo URL.",
-        "required": ["_id", "name", "email", "phone", "createdAt", "updatedAt"],
+        "required": [
+          "_id",
+          "name",
+          "email",
+          "phoneNumber",
+          "createdAt",
+          "updatedAt"
+        ],
+        "additionalProperties": false,
         "properties": {
           "_id": {
             "type": "string",
             "description": "Mongo ObjectId",
+            "pattern": "^[a-f0-9]{24}$",
+            "readOnly": true,
             "example": "66b2f0c0c5a0d94d2b8c5678"
           },
           "name": {
             "type": "string",
-            "example": "John Doe"
+            "example": "Alice Test"
           },
           "email": {
             "type": "string",
             "format": "email",
-            "example": "john@example.com"
+            "example": "alice@example.com"
           },
-          "phone": {
+          "phoneNumber": {
             "type": "string",
-            "example": "+380501112233"
+            "description": "International phone in E.164 or similar format",
+            "example": "+380501234567"
           },
-          "favorite": {
+          "isFavourite": {
             "type": "boolean",
             "default": false,
-            "example": false
+            "example": true
+          },
+          "contactType": {
+            "type": "string",
+            "description": "Arbitrary label for the contact (e.g., work/home)",
+            "example": "work"
           },
           "photo": {
             "type": "string",
+            "format": "uri",
             "nullable": true,
             "description": "Public URL to contact photo (e.g., Cloudinary)",
             "example": "https://res.cloudinary.com/demo/image/upload/sample.jpg"
           },
+          "userId": {
+            "type": "string",
+            "description": "Owner user id (Mongo ObjectId)",
+            "pattern": "^[a-f0-9]{24}$",
+            "readOnly": true,
+            "example": "6698c7360e59d8758205404f"
+          },
           "createdAt": {
             "type": "string",
             "format": "date-time",
-            "example": "2025-08-16T09:15:27.000Z"
+            "readOnly": true,
+            "example": "2025-08-14T19:10:04.073Z"
           },
           "updatedAt": {
             "type": "string",
             "format": "date-time",
-            "example": "2025-08-16T09:15:27.000Z"
+            "readOnly": true,
+            "example": "2025-08-14T19:34:07.478Z"
           }
         }
       },
       "CreateContactJSON": {
         "type": "object",
-        "required": ["name", "email", "phone"],
+        "required": [
+          "name",
+          "email",
+          "phoneNumber"
+        ],
         "properties": {
           "name": {
             "type": "string",
             "minLength": 2,
             "maxLength": 128,
-            "example": "John Doe"
+            "example": "Alice Test"
           },
           "email": {
             "type": "string",
             "format": "email",
-            "example": "john@example.com"
+            "example": "alice@example.com"
           },
-          "phone": {
+          "phoneNumber": {
             "type": "string",
-            "example": "+380501112233"
+            "example": "+380501234567"
           },
-          "favorite": {
+          "isFavourite": {
             "type": "boolean",
-            "default": false
+            "default": false,
+            "example": true
+          },
+          "contactType": {
+            "type": "string",
+            "example": "work"
+          },
+          "photo": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true,
+            "description": "Optional direct URL; usually set by server after file upload"
           }
         }
       },
@@ -829,36 +929,45 @@
             "type": "string",
             "minLength": 2,
             "maxLength": 128,
-            "example": "Johnathan Doe"
+            "example": "Alice Test"
           },
           "email": {
             "type": "string",
             "format": "email",
-            "example": "john.new@example.com"
+            "example": "alice@example.com"
           },
-          "phone": {
+          "phoneNumber": {
             "type": "string",
-            "example": "+380501112299"
+            "example": "+380500000000"
           },
-          "favorite": {
+          "isFavourite": {
             "type": "boolean",
             "example": true
           },
+          "contactType": {
+            "type": "string",
+            "example": "work"
+          },
           "photo": {
             "type": "string",
+            "format": "uri",
             "nullable": true,
-            "description": "Optional direct URL to a photo (usually set by the server after multipart upload).\n"
+            "description": "Optional direct URL (usually set by the server after multipart upload)"
           }
         }
       },
       "SuccessBase": {
         "type": "object",
         "description": "Standard success envelope fields.",
-        "required": ["status"],
+        "required": [
+          "status"
+        ],
         "properties": {
           "status": {
             "type": "string",
-            "enum": ["success"],
+            "enum": [
+              "success"
+            ],
             "example": "success"
           },
           "message": {
