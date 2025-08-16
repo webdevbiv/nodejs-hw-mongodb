@@ -3,7 +3,7 @@ get:
   tags: [System]
   summary: Health check
   operationId: healthCheck
-  security: []
+  security: [] # public endpoint
   responses:
     '200':
       description: OK — server is running

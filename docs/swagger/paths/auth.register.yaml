@@ -1,9 +1,9 @@
-# docs/swagger/paths/auth.refresh.yaml
+# docs/swagger/paths/auth.register.yaml
 post:
   tags: [Auth]
   summary: Register a user
   operationId: registerUser
-  security: []
+  security: [] # public
   requestBody:
     required: true
     content:
@@ -23,6 +23,15 @@ post:
         application/json:
           schema:
             $ref: ../components/schemas/User.yaml
+          examples:
+            created:
+              value:
+                _id: '66b2f0c0c5a0d94d2b8c1234'
+                name: 'Igor'
+                email: 'igor@example.com'
+                avatarURL: null
+                createdAt: '2025-08-16T09:15:27.000Z'
+                updatedAt: '2025-08-16T09:15:27.000Z'
     '400':
       $ref: ../components/responses/Error.yaml
     '409':

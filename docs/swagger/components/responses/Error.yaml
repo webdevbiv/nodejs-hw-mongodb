@@ -27,3 +27,13 @@ content:
         value:
           status: error
           message: 'Resource not found'
+      conflict:
+        summary: Conflict
+        value:
+          status: error
+          message: 'Email in use'
+      invalidId:
+        summary: Invalid ObjectId
+        value:
+          status: error
+          message: 'Invalid contact ID: 123'
