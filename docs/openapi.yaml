@@ -1,0 +1,20 @@
+# redocly.yaml
+apis:
+  main:
+    root: ./docs/openapi.yaml
+
+lint:
+  extends:
+    - recommended
+
+theme:
+  openapi:
+    expandResponses: '200,201'
+    showExtensions: true
+    showCommonExtensions: true
+
+referenceDocs:
+  htmlTemplate: ./docs/index.html
+  layout:
+    scope: section
+    pagination: section
