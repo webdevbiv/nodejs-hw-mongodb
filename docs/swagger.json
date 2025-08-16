@@ -11,11 +11,11 @@
   },
   "servers": [
     {
-      "url": "https://<your-render-app>.onrender.com",
+      "url": "https://contacts-xxm3.onrender.com",
       "description": "Production (Render)"
     },
     {
-      "url": "http://localhost:8080",
+      "url": "http://localhost:3000",
       "description": "Local"
     }
   ],
@@ -36,9 +36,7 @@
   "paths": {
     "/": {
       "get": {
-        "tags": [
-          "System"
-        ],
+        "tags": ["System"],
         "summary": "Health check",
         "operationId": "healthCheck",
         "security": [],
@@ -62,9 +60,7 @@
     },
     "/auth/register": {
       "post": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "summary": "Register a user",
         "operationId": "registerUser",
         "security": [],
@@ -121,9 +117,7 @@
     },
     "/auth/login": {
       "post": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "summary": "Login and get tokens",
         "operationId": "loginUser",
         "security": [],
@@ -183,9 +177,7 @@
     },
     "/auth/refresh": {
       "post": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "summary": "Refresh session using refresh token",
         "operationId": "refreshSession",
         "description": "Uses HTTP-only refresh token cookie to issue new access/refresh tokens.",
@@ -225,9 +217,7 @@
     },
     "/auth/logout": {
       "post": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "summary": "Logout (invalidate session)",
         "operationId": "logoutUser",
         "security": [
@@ -250,9 +240,7 @@
     },
     "/contacts": {
       "get": {
-        "tags": [
-          "Contacts"
-        ],
+        "tags": ["Contacts"],
         "summary": "List contacts",
         "operationId": "listContacts",
         "security": [
@@ -354,9 +342,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Contacts"
-        ],
+        "tags": ["Contacts"],
         "summary": "Create contact (JSON or multipart)",
         "operationId": "createContact",
         "description": "Accepts JSON or multipart/form-data with a `photo` file. If a file is provided, the server uploads it (e.g., to Cloudinary) and stores the URL.\n",
@@ -386,11 +372,7 @@
             "multipart/form-data": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "name",
-                  "email",
-                  "phone"
-                ],
+                "required": ["name", "email", "phone"],
                 "properties": {
                   "name": {
                     "type": "string"
@@ -477,9 +459,7 @@
         }
       ],
       "get": {
-        "tags": [
-          "Contacts"
-        ],
+        "tags": ["Contacts"],
         "summary": "Get contact by id",
         "operationId": "getContactById",
         "security": [
@@ -540,9 +520,7 @@
         }
       },
       "patch": {
-        "tags": [
-          "Contacts"
-        ],
+        "tags": ["Contacts"],
         "summary": "Update contact (JSON or multipart)",
         "operationId": "updateContact",
         "description": "Accepts JSON fields and/or multipart/form-data with a `photo` file to replace the existing contact photo.\n",
@@ -638,9 +616,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Contacts"
-        ],
+        "tags": ["Contacts"],
         "summary": "Delete contact",
         "operationId": "deleteContact",
         "security": [
@@ -677,13 +653,7 @@
       "User": {
         "type": "object",
         "description": "Public user representation returned by the API.",
-        "required": [
-          "_id",
-          "name",
-          "email",
-          "createdAt",
-          "updatedAt"
-        ],
+        "required": ["_id", "name", "email", "createdAt", "updatedAt"],
         "additionalProperties": false,
         "properties": {
           "_id": {
@@ -726,11 +696,7 @@
       },
       "RegisterBody": {
         "type": "object",
-        "required": [
-          "name",
-          "email",
-          "password"
-        ],
+        "required": ["name", "email", "password"],
         "properties": {
           "name": {
             "type": "string",
@@ -753,10 +719,7 @@
       },
       "LoginBody": {
         "type": "object",
-        "required": [
-          "email",
-          "password"
-        ],
+        "required": ["email", "password"],
         "properties": {
           "email": {
             "type": "string",
@@ -773,10 +736,7 @@
       },
       "AuthResponse": {
         "type": "object",
-        "required": [
-          "accessToken",
-          "user"
-        ],
+        "required": ["accessToken", "user"],
         "properties": {
           "accessToken": {
             "type": "string"
@@ -793,14 +753,7 @@
       "Contact": {
         "type": "object",
         "description": "Contact entity with optional hosted photo URL.",
-        "required": [
-          "_id",
-          "name",
-          "email",
-          "phone",
-          "createdAt",
-          "updatedAt"
-        ],
+        "required": ["_id", "name", "email", "phone", "createdAt", "updatedAt"],
         "properties": {
           "_id": {
             "type": "string",
@@ -845,11 +798,7 @@
       },
       "CreateContactJSON": {
         "type": "object",
-        "required": [
-          "name",
-          "email",
-          "phone"
-        ],
+        "required": ["name", "email", "phone"],
         "properties": {
           "name": {
             "type": "string",
@@ -905,15 +854,11 @@
       "SuccessBase": {
         "type": "object",
         "description": "Standard success envelope fields.",
-        "required": [
-          "status"
-        ],
+        "required": ["status"],
         "properties": {
           "status": {
             "type": "string",
-            "enum": [
-              "success"
-            ],
+            "enum": ["success"],
             "example": "success"
           },
           "message": {
