@@ -11,12 +11,12 @@
   },
   "servers": [
     {
-      "url": "https://api.myapp.com",
-      "description": "Production"
+      "url": "https://<your-render-app>.onrender.com",
+      "description": "Production (Render)"
     },
     {
       "url": "http://localhost:3000",
-      "description": "Local development"
+      "description": "Local"
     }
   ],
   "tags": [
@@ -94,6 +94,18 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/User"
+                },
+                "examples": {
+                  "created": {
+                    "value": {
+                      "_id": "66b2f0c0c5a0d94d2b8c1234",
+                      "name": "Igor",
+                      "email": "igor@example.com",
+                      "avatarURL": null,
+                      "createdAt": "2025-08-16T09:15:27.000Z",
+                      "updatedAt": "2025-08-16T09:15:27.000Z"
+                    }
+                  }
                 }
               }
             }
@@ -140,6 +152,22 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/AuthResponse"
+                },
+                "examples": {
+                  "success": {
+                    "value": {
+                      "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.access.payload.sig",
+                      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.refresh.payload.sig",
+                      "user": {
+                        "_id": "66b2f0c0c5a0d94d2b8c1234",
+                        "name": "Igor",
+                        "email": "igor@example.com",
+                        "avatarURL": null,
+                        "createdAt": "2025-08-16T09:15:27.000Z",
+                        "updatedAt": "2025-08-16T09:15:27.000Z"
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -169,6 +197,22 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/AuthResponse"
+                },
+                "examples": {
+                  "refreshed": {
+                    "value": {
+                      "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.new.access.sig",
+                      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.new.refresh.sig",
+                      "user": {
+                        "_id": "66b2f0c0c5a0d94d2b8c1234",
+                        "name": "Igor",
+                        "email": "igor@example.com",
+                        "avatarURL": null,
+                        "createdAt": "2025-08-16T09:15:27.000Z",
+                        "updatedAt": "2025-08-16T09:15:27.000Z"
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -222,7 +266,8 @@
             "name": "favorite",
             "schema": {
               "type": "boolean"
-            }
+            },
+            "description": "Filter by favorite flag"
           },
           {
             "in": "query",
@@ -259,6 +304,34 @@
                       }
                     }
                   }
+                },
+                "examples": {
+                  "list": {
+                    "value": {
+                      "data": [
+                        {
+                          "_id": "66b2f0c0c5a0d94d2b8c5678",
+                          "name": "John Doe",
+                          "email": "john@example.com",
+                          "phone": "+380501112233",
+                          "favorite": false,
+                          "photo": null,
+                          "createdAt": "2025-08-16T09:15:27.000Z",
+                          "updatedAt": "2025-08-16T09:15:27.000Z"
+                        },
+                        {
+                          "_id": "66b2f0c0c5a0d94d2b8c5679",
+                          "name": "Jane Smith",
+                          "email": "jane@example.com",
+                          "phone": "+380971112233",
+                          "favorite": true,
+                          "photo": "https://res.cloudinary.com/demo/image/upload/sample.jpg",
+                          "createdAt": "2025-08-16T10:12:05.000Z",
+                          "updatedAt": "2025-08-16T10:12:05.000Z"
+                        }
+                      ]
+                    }
+                  }
                 }
               }
             }
@@ -277,7 +350,7 @@
         ],
         "summary": "Create contact (JSON or multipart)",
         "operationId": "createContact",
-        "description": "Accepts JSON or multipart/form-data with a `photo` file.\n",
+        "description": "Accepts JSON or multipart/form-data with a `photo` file. If a file is provided, the server uploads it (e.g., to Cloudinary) and stores the URL.\n",
         "security": [
           {
             "bearerAuth": []
@@ -289,6 +362,16 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/CreateContactJSON"
+              },
+              "examples": {
+                "sample": {
+                  "value": {
+                    "name": "John Doe",
+                    "email": "john@example.com",
+                    "phone": "+380501112233",
+                    "favorite": false
+                  }
+                }
               }
             },
             "multipart/form-data": {
@@ -314,7 +397,8 @@
                   },
                   "photo": {
                     "type": "string",
-                    "format": "binary"
+                    "format": "binary",
+                    "description": "Contact photo file"
                   }
                 }
               }
@@ -328,6 +412,20 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Contact"
+                },
+                "examples": {
+                  "created": {
+                    "value": {
+                      "_id": "66b2f0c0c5a0d94d2b8c5680",
+                      "name": "John Doe",
+                      "email": "john@example.com",
+                      "phone": "+380501112233",
+                      "favorite": false,
+                      "photo": null,
+                      "createdAt": "2025-08-16T11:03:44.000Z",
+                      "updatedAt": "2025-08-16T11:03:44.000Z"
+                    }
+                  }
                 }
               }
             }
@@ -349,7 +447,8 @@
           "required": true,
           "schema": {
             "type": "string"
-          }
+          },
+          "description": "Mongo ObjectId of the contact"
         }
       ],
       "get": {
@@ -370,6 +469,20 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Contact"
+                },
+                "examples": {
+                  "found": {
+                    "value": {
+                      "_id": "66b2f0c0c5a0d94d2b8c5678",
+                      "name": "John Doe",
+                      "email": "john@example.com",
+                      "phone": "+380501112233",
+                      "favorite": false,
+                      "photo": null,
+                      "createdAt": "2025-08-16T09:15:27.000Z",
+                      "updatedAt": "2025-08-16T09:15:27.000Z"
+                    }
+                  }
                 }
               }
             }
@@ -391,6 +504,7 @@
         ],
         "summary": "Update contact (JSON or multipart)",
         "operationId": "updateContact",
+        "description": "Accepts JSON fields and/or multipart/form-data with a `photo` file to replace the existing contact photo.\n",
         "security": [
           {
             "bearerAuth": []
@@ -422,7 +536,8 @@
                   },
                   "photo": {
                     "type": "string",
-                    "format": "binary"
+                    "format": "binary",
+                    "description": "New contact photo file"
                   }
                 }
               }
@@ -436,6 +551,20 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Contact"
+                },
+                "examples": {
+                  "updated": {
+                    "value": {
+                      "_id": "66b2f0c0c5a0d94d2b8c5678",
+                      "name": "Johnathan Doe",
+                      "email": "john.new@example.com",
+                      "phone": "+380501112299",
+                      "favorite": true,
+                      "photo": "https://res.cloudinary.com/demo/image/upload/sample.jpg",
+                      "createdAt": "2025-08-16T09:15:27.000Z",
+                      "updatedAt": "2025-08-16T12:45:10.000Z"
+                    }
+                  }
                 }
               }
             }
@@ -748,6 +877,20 @@
                 "value": {
                   "status": "error",
                   "message": "Resource not found"
+                }
+              },
+              "conflict": {
+                "summary": "Conflict",
+                "value": {
+                  "status": "error",
+                  "message": "Email in use"
+                }
+              },
+              "invalidId": {
+                "summary": "Invalid ObjectId",
+                "value": {
+                  "status": "error",
+                  "message": "Invalid contact ID: 123"
                 }
               }
             }

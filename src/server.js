@@ -37,29 +37,6 @@ app.use('/api-docs', swaggerDocs());
 // Serve /docs folder statically
 app.use('/docs', express.static(path.resolve('docs')));
 
-// Simple ReDoc renderer at /redoc using your docs/index.html template
-app.get('/redoc', (_req, res) => {
-  const htmlPath = path.resolve('docs', 'index.html');
-  if (!fs.existsSync(htmlPath)) {
-    return res
-      .status(404)
-      .send('docs/index.html not found. Add template or run Redocly build.');
-  }
-
-  const html = fs.readFileSync(htmlPath, 'utf8');
-  const redocHead = `
-    <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"></script>
-  `;
-  const redocHTML = `<redoc spec-url="/docs/openapi.yaml"></redoc>`;
-
-  const rendered = html
-    .replace('{{{redocHead}}}', redocHead)
-    .replace('{{{redocHTML}}}', redocHTML);
-
-  res.setHeader('Content-Type', 'text/html; charset=utf-8');
-  return res.send(rendered);
-});
-
 // 404 + error handlers
 app.use(notFoundHandler);
 app.use(errorHandler);
@@ -72,7 +49,6 @@ export function setupServer() {
   app.listen(PORT, () => {
     logger.info(`Server is running on ${PORT}`);
     logger.info(`Swagger UI: http://localhost:${PORT}/api-docs`);
-    logger.info(`ReDoc:      http://localhost:${PORT}/redoc`);
     logger.info(`Docs raw:   http://localhost:${PORT}/docs/openapi.yaml`);
   });
 }

@@ -9,10 +9,10 @@ info:
     url: https://opensource.org/licenses/MIT
 
 servers:
-  - url: https://api.myapp.com
-    description: Production
+  - url: https://<your-render-app>.onrender.com
+    description: Production (Render)
   - url: http://localhost:3000
-    description: Local development
+    description: Local
 
 tags:
   - name: System
