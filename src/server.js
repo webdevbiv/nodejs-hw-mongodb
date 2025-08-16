@@ -2,7 +2,6 @@
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import fs from 'node:fs';
 import path from 'node:path';
 
 import { getEnv } from './utils/getEnv.js';

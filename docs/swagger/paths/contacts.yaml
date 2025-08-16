@@ -22,15 +22,19 @@ get:
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              data:
-                type: array
-                items:
-                  $ref: ../components/schemas/Contact.yaml
+            allOf:
+              - $ref: ../components/schemas/SuccessBase.yaml
+              - type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: ../components/schemas/Contact.yaml
           examples:
             list:
               value:
+                status: success
+                message: Successfully found contacts!
                 data:
                   - _id: '66b2f0c0c5a0d94d2b8c5678'
                     name: 'John Doe'
@@ -94,18 +98,26 @@ post:
       content:
         application/json:
           schema:
-            $ref: ../components/schemas/Contact.yaml
+            allOf:
+              - $ref: ../components/schemas/SuccessBase.yaml
+              - type: object
+                properties:
+                  data:
+                    $ref: ../components/schemas/Contact.yaml
           examples:
             created:
               value:
-                _id: '66b2f0c0c5a0d94d2b8c5680'
-                name: 'John Doe'
-                email: 'john@example.com'
-                phone: '+380501112233'
-                favorite: false
-                photo: null
-                createdAt: '2025-08-16T11:03:44.000Z'
-                updatedAt: '2025-08-16T11:03:44.000Z'
+                status: success
+                message: Successfully created a contact!
+                data:
+                  _id: '66b2f0c0c5a0d94d2b8c5680'
+                  name: 'John Doe'
+                  email: 'john@example.com'
+                  phone: '+380501112233'
+                  favorite: false
+                  photo: null
+                  createdAt: '2025-08-16T11:03:44.000Z'
+                  updatedAt: '2025-08-16T11:03:44.000Z'
     '400':
       $ref: ../components/responses/Error.yaml
     '401':

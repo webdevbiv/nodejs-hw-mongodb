@@ -18,18 +18,26 @@ get:
       content:
         application/json:
           schema:
-            $ref: ../components/schemas/Contact.yaml
+            allOf:
+              - $ref: ../components/schemas/SuccessBase.yaml
+              - type: object
+                properties:
+                  data:
+                    $ref: ../components/schemas/Contact.yaml
           examples:
             found:
               value:
-                _id: '66b2f0c0c5a0d94d2b8c5678'
-                name: 'John Doe'
-                email: 'john@example.com'
-                phone: '+380501112233'
-                favorite: false
-                photo: null
-                createdAt: '2025-08-16T09:15:27.000Z'
-                updatedAt: '2025-08-16T09:15:27.000Z'
+                status: success
+                message: 'Contact with ID 66b2f0c0c5a0d94d2b8c5678 found'
+                data:
+                  _id: '66b2f0c0c5a0d94d2b8c5678'
+                  name: 'John Doe'
+                  email: 'john@example.com'
+                  phone: '+380501112233'
+                  favorite: false
+                  photo: null
+                  createdAt: '2025-08-16T09:15:27.000Z'
+                  updatedAt: '2025-08-16T09:15:27.000Z'
     '401':
       $ref: ../components/responses/Error.yaml
     '404':
@@ -70,18 +78,26 @@ patch:
       content:
         application/json:
           schema:
-            $ref: ../components/schemas/Contact.yaml
+            allOf:
+              - $ref: ../components/schemas/SuccessBase.yaml
+              - type: object
+                properties:
+                  data:
+                    $ref: ../components/schemas/Contact.yaml
           examples:
             updated:
               value:
-                _id: '66b2f0c0c5a0d94d2b8c5678'
-                name: 'Johnathan Doe'
-                email: 'john.new@example.com'
-                phone: '+380501112299'
-                favorite: true
-                photo: 'https://res.cloudinary.com/demo/image/upload/sample.jpg'
-                createdAt: '2025-08-16T09:15:27.000Z'
-                updatedAt: '2025-08-16T12:45:10.000Z'
+                status: success
+                message: Successfully patched a contact!
+                data:
+                  _id: '66b2f0c0c5a0d94d2b8c5678'
+                  name: 'Johnathan Doe'
+                  email: 'john.new@example.com'
+                  phone: '+380501112299'
+                  favorite: true
+                  photo: 'https://res.cloudinary.com/demo/image/upload/sample.jpg'
+                  createdAt: '2025-08-16T09:15:27.000Z'
+                  updatedAt: '2025-08-16T12:45:10.000Z'
     '401':
       $ref: ../components/responses/Error.yaml
     '404':

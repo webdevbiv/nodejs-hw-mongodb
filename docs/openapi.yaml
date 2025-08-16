@@ -45,16 +45,22 @@ components:
       scheme: bearer
       bearerFormat: JWT
 
+  components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
   schemas:
-    User: { $ref: ./swagger/components/schemas/User.yaml }
-    RegisterBody: { $ref: ./swagger/components/schemas/RegisterBody.yaml }
-    LoginBody: { $ref: ./swagger/components/schemas/LoginBody.yaml }
-    AuthResponse: { $ref: ./swagger/components/schemas/AuthResponse.yaml }
-    Contact: { $ref: ./swagger/components/schemas/Contact.yaml }
-    CreateContactJSON:
-      { $ref: ./swagger/components/schemas/CreateContactJSON.yaml }
-    UpdateContactJSON:
-      { $ref: ./swagger/components/schemas/UpdateContactJSON.yaml }
+    User:              { $ref: ./swagger/components/schemas/User.yaml }
+    RegisterBody:      { $ref: ./swagger/components/schemas/RegisterBody.yaml }
+    LoginBody:         { $ref: ./swagger/components/schemas/LoginBody.yaml }
+    AuthResponse:      { $ref: ./swagger/components/schemas/AuthResponse.yaml }
+    Contact:           { $ref: ./swagger/components/schemas/Contact.yaml }
+    CreateContactJSON: { $ref: ./swagger/components/schemas/CreateContactJSON.yaml }
+    UpdateContactJSON: { $ref: ./swagger/components/schemas/UpdateContactJSON.yaml }
+    SuccessBase:       { $ref: ./swagger/components/schemas/SuccessBase.yaml } 
 
   responses:
     Error: { $ref: ./swagger/components/responses/Error.yaml }

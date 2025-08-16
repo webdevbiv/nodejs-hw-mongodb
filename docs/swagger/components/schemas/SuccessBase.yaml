@@ -1,0 +1,13 @@
+type: object
+description: Standard success envelope fields.
+required:
+  - status
+properties:
+  status:
+    type: string
+    enum: [success]
+    example: success
+  message:
+    type: string
+    description: Human-readable success message
+    example: Successfully found contacts!
