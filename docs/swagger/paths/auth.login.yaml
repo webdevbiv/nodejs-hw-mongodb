@@ -1,0 +1,28 @@
+# docs/swagger/paths/auth.login.yaml
+post:
+  tags: [Auth]
+  summary: Login and get tokens
+  operationId: loginUser
+  security: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/LoginBody.yaml
+        examples:
+          sample:
+            value:
+              email: igor@example.com
+              password: secret123
+  responses:
+    '200':
+      description: Logged in
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/AuthResponse.yaml
+    '400':
+      $ref: ../components/responses/Error.yaml
+    '401':
+      $ref: ../components/responses/Error.yaml

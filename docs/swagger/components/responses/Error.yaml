@@ -1,0 +1,29 @@
+# docs/swagger/components/responses/Error.yaml
+description: Error response
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        status:
+          type: string
+          example: error
+        message:
+          type: string
+          example: Bad Request
+    examples:
+      badRequest:
+        summary: Validation error
+        value:
+          status: error
+          message: 'Validation failed for one or more fields'
+      unauthorized:
+        summary: Unauthorized
+        value:
+          status: error
+          message: 'Unauthorized'
+      notFound:
+        summary: Not found
+        value:
+          status: error
+          message: 'Resource not found'

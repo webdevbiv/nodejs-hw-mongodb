@@ -1,0 +1,29 @@
+# docs/swagger/components/schemas/User.yaml
+type: object
+description: Public user representation returned by the API.
+required: [_id, name, email, createdAt, updatedAt]
+properties:
+  _id:
+    type: string
+    description: Mongo ObjectId
+    example: '66b2f0c0c5a0d94d2b8c1234'
+  name:
+    type: string
+    example: Igor
+  email:
+    type: string
+    format: email
+    example: igor@example.com
+  avatarURL:
+    type: string
+    nullable: true
+    description: Public URL to the user's avatar (local or CDN)
+    example: '/avatars/1723819200-ava.png'
+  createdAt:
+    type: string
+    format: date-time
+    example: '2025-08-16T09:15:27.000Z'
+  updatedAt:
+    type: string
+    format: date-time
+    example: '2025-08-16T09:15:27.000Z'

@@ -1,0 +1,71 @@
+# docs/swagger/paths/contacts.yaml
+get:
+  tags: [Contacts]
+  summary: List contacts
+  operationId: listContacts
+  security:
+    - bearerAuth: []
+  parameters:
+    - in: query
+      name: favorite
+      schema: { type: boolean }
+    - in: query
+      name: page
+      schema: { type: integer, minimum: 1, default: 1 }
+    - in: query
+      name: limit
+      schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: ../components/schemas/Contact.yaml
+    '401':
+      $ref: ../components/responses/Error.yaml
+    '400':
+      $ref: ../components/responses/Error.yaml
+
+post:
+  tags: [Contacts]
+  summary: Create contact (JSON or multipart)
+  operationId: createContact
+  description: >
+    Accepts JSON or multipart/form-data with a `photo` file.
+  security:
+    - bearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/CreateContactJSON.yaml
+      multipart/form-data:
+        schema:
+          type: object
+          required: [name, email, phone]
+          properties:
+            name: { type: string }
+            email: { type: string }
+            phone: { type: string }
+            favorite: { type: boolean }
+            photo:
+              type: string
+              format: binary
+  responses:
+    '201':
+      description: Created
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Contact.yaml
+    '400':
+      $ref: ../components/responses/Error.yaml
+    '401':
+      $ref: ../components/responses/Error.yaml

@@ -1,0 +1,14 @@
+# docs/swagger/paths/auth.logout.yaml
+post:
+  tags: [Auth]
+  summary: Logout (invalidate session)
+  operationId: logoutUser
+  security:
+    - bearerAuth: []
+  responses:
+    '204':
+      description: Logged out
+    '401':
+      $ref: ../components/responses/Error.yaml
+    '400':
+      $ref: ../components/responses/Error.yaml

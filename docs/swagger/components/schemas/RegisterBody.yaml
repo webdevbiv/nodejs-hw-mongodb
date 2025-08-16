@@ -1,0 +1,21 @@
+# docs/swagger/components/schemas/RegisterBody.yaml
+type: object
+required:
+  - name
+  - email
+  - password
+properties:
+  name:
+    type: string
+    minLength: 2
+    maxLength: 64
+    example: Igor
+  email:
+    type: string
+    format: email
+    example: igor@example.com
+  password:
+    type: string
+    minLength: 6
+    maxLength: 128
+    example: secret123

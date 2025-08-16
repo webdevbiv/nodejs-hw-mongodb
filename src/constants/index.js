@@ -1,3 +1,5 @@
+import path from 'node:path';
+
 export const HttpStatus = {
   OK: 200,
   CREATED: 201,
@@ -25,3 +27,5 @@ export const Messages = {
   INVALID_REFRESH_TOKEN: 'Invalid or expired refresh token',
   USER_NOT_FOUND: 'User not found',
 };
+
+export const SWAGGER_PATH = path.join(process.cwd(), 'docs', 'swagger.json');

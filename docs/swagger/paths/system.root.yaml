@@ -1,0 +1,16 @@
+# docs/swagger/paths/system.root.yaml
+get:
+  tags: [System]
+  summary: Health check
+  operationId: healthCheck
+  security: []
+  responses:
+    '200':
+      description: OK — server is running
+      content:
+        text/plain:
+          schema:
+            type: string
+            example: Contacts API is running.
+    '400':
+      $ref: ../components/responses/Error.yaml

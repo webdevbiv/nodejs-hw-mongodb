@@ -1,0 +1,29 @@
+# docs/swagger/paths/auth.refresh.yaml
+post:
+  tags: [Auth]
+  summary: Register a user
+  operationId: registerUser
+  security: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/RegisterBody.yaml
+        examples:
+          sample:
+            value:
+              name: Igor
+              email: igor@example.com
+              password: secret123
+  responses:
+    '201':
+      description: User created
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/User.yaml
+    '400':
+      $ref: ../components/responses/Error.yaml
+    '409':
+      $ref: ../components/responses/Error.yaml

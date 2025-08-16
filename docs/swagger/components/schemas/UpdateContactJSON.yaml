@@ -1,0 +1,24 @@
+# docs/swagger/components/schemas/UpdateContactJSON.yaml
+type: object
+description: Partial update payload for a contact.
+properties:
+  name:
+    type: string
+    minLength: 2
+    maxLength: 128
+    example: Johnathan Doe
+  email:
+    type: string
+    format: email
+    example: john.new@example.com
+  phone:
+    type: string
+    example: '+380501112299'
+  favorite:
+    type: boolean
+    example: true
+  photo:
+    type: string
+    nullable: true
+    description: >
+      Optional direct URL to a photo (usually set by the server after multipart upload).

@@ -1,20 +1,60 @@
-# redocly.yaml
-apis:
-  main:
-    root: ./docs/openapi.yaml
+# docs/openapi.yaml
+openapi: 3.0.3
+info:
+  title: Contacts API (HW-07)
+  version: 1.0.0
+  description: REST API for auth and contacts CRUD with optional photo upload.
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
 
-lint:
-  extends:
-    - recommended
+servers:
+  - url: https://api.myapp.com
+    description: Production
+  - url: http://localhost:3000
+    description: Local development
 
-theme:
-  openapi:
-    expandResponses: '200,201'
-    showExtensions: true
-    showCommonExtensions: true
+tags:
+  - name: System
+    description: Health and service metadata
+  - name: Auth
+    description: User authentication and session management
+  - name: Contacts
+    description: CRUD for contacts and photo upload
 
-referenceDocs:
-  htmlTemplate: ./docs/index.html
-  layout:
-    scope: section
-    pagination: section
+paths:
+  /:
+    $ref: ./swagger/paths/system.root.yaml
+  /auth/register:
+    $ref: ./swagger/paths/auth.register.yaml
+  /auth/login:
+    $ref: ./swagger/paths/auth.login.yaml
+  /auth/refresh:
+    $ref: ./swagger/paths/auth.refresh.yaml
+  /auth/logout:
+    $ref: ./swagger/paths/auth.logout.yaml
+  /contacts:
+    $ref: ./swagger/paths/contacts.yaml
+  /contacts/{contactId}:
+    $ref: ./swagger/paths/contacts.id.yaml
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    User: { $ref: ./swagger/components/schemas/User.yaml }
+    RegisterBody: { $ref: ./swagger/components/schemas/RegisterBody.yaml }
+    LoginBody: { $ref: ./swagger/components/schemas/LoginBody.yaml }
+    AuthResponse: { $ref: ./swagger/components/schemas/AuthResponse.yaml }
+    Contact: { $ref: ./swagger/components/schemas/Contact.yaml }
+    CreateContactJSON:
+      { $ref: ./swagger/components/schemas/CreateContactJSON.yaml }
+    UpdateContactJSON:
+      { $ref: ./swagger/components/schemas/UpdateContactJSON.yaml }
+
+  responses:
+    Error: { $ref: ./swagger/components/responses/Error.yaml }

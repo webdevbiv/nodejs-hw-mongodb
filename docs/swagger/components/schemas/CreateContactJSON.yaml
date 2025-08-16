@@ -1,0 +1,22 @@
+# docs/swagger/components/schemas/CreateContactJSON.yaml
+type: object
+required:
+  - name
+  - email
+  - phone
+properties:
+  name:
+    type: string
+    minLength: 2
+    maxLength: 128
+    example: John Doe
+  email:
+    type: string
+    format: email
+    example: john@example.com
+  phone:
+    type: string
+    example: '+380501112233'
+  favorite:
+    type: boolean
+    default: false
