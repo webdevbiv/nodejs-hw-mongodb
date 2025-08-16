@@ -15,7 +15,7 @@
       "description": "Production (Render)"
     },
     {
-      "url": "http://localhost:3000",
+      "url": "http://localhost:8080",
       "description": "Local"
     }
   ],
@@ -295,19 +295,28 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Contact"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SuccessBase"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Contact"
+                          }
+                        }
                       }
                     }
-                  }
+                  ]
                 },
                 "examples": {
                   "list": {
                     "value": {
+                      "status": "success",
+                      "message": "Successfully found contacts!",
                       "data": [
                         {
                           "_id": "66b2f0c0c5a0d94d2b8c5678",
@@ -411,19 +420,35 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Contact"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SuccessBase"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/Contact"
+                        }
+                      }
+                    }
+                  ]
                 },
                 "examples": {
                   "created": {
                     "value": {
-                      "_id": "66b2f0c0c5a0d94d2b8c5680",
-                      "name": "John Doe",
-                      "email": "john@example.com",
-                      "phone": "+380501112233",
-                      "favorite": false,
-                      "photo": null,
-                      "createdAt": "2025-08-16T11:03:44.000Z",
-                      "updatedAt": "2025-08-16T11:03:44.000Z"
+                      "status": "success",
+                      "message": "Successfully created a contact!",
+                      "data": {
+                        "_id": "66b2f0c0c5a0d94d2b8c5680",
+                        "name": "John Doe",
+                        "email": "john@example.com",
+                        "phone": "+380501112233",
+                        "favorite": false,
+                        "photo": null,
+                        "createdAt": "2025-08-16T11:03:44.000Z",
+                        "updatedAt": "2025-08-16T11:03:44.000Z"
+                      }
                     }
                   }
                 }
@@ -468,19 +493,35 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Contact"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SuccessBase"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/Contact"
+                        }
+                      }
+                    }
+                  ]
                 },
                 "examples": {
                   "found": {
                     "value": {
-                      "_id": "66b2f0c0c5a0d94d2b8c5678",
-                      "name": "John Doe",
-                      "email": "john@example.com",
-                      "phone": "+380501112233",
-                      "favorite": false,
-                      "photo": null,
-                      "createdAt": "2025-08-16T09:15:27.000Z",
-                      "updatedAt": "2025-08-16T09:15:27.000Z"
+                      "status": "success",
+                      "message": "Contact with ID 66b2f0c0c5a0d94d2b8c5678 found",
+                      "data": {
+                        "_id": "66b2f0c0c5a0d94d2b8c5678",
+                        "name": "John Doe",
+                        "email": "john@example.com",
+                        "phone": "+380501112233",
+                        "favorite": false,
+                        "photo": null,
+                        "createdAt": "2025-08-16T09:15:27.000Z",
+                        "updatedAt": "2025-08-16T09:15:27.000Z"
+                      }
                     }
                   }
                 }
@@ -550,19 +591,35 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Contact"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SuccessBase"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/Contact"
+                        }
+                      }
+                    }
+                  ]
                 },
                 "examples": {
                   "updated": {
                     "value": {
-                      "_id": "66b2f0c0c5a0d94d2b8c5678",
-                      "name": "Johnathan Doe",
-                      "email": "john.new@example.com",
-                      "phone": "+380501112299",
-                      "favorite": true,
-                      "photo": "https://res.cloudinary.com/demo/image/upload/sample.jpg",
-                      "createdAt": "2025-08-16T09:15:27.000Z",
-                      "updatedAt": "2025-08-16T12:45:10.000Z"
+                      "status": "success",
+                      "message": "Successfully patched a contact!",
+                      "data": {
+                        "_id": "66b2f0c0c5a0d94d2b8c5678",
+                        "name": "Johnathan Doe",
+                        "email": "john.new@example.com",
+                        "phone": "+380501112299",
+                        "favorite": true,
+                        "photo": "https://res.cloudinary.com/demo/image/upload/sample.jpg",
+                        "createdAt": "2025-08-16T09:15:27.000Z",
+                        "updatedAt": "2025-08-16T12:45:10.000Z"
+                      }
                     }
                   }
                 }
@@ -627,14 +684,18 @@
           "createdAt",
           "updatedAt"
         ],
+        "additionalProperties": false,
         "properties": {
           "_id": {
             "type": "string",
             "description": "Mongo ObjectId",
+            "pattern": "^[a-f0-9]{24}$",
+            "readOnly": true,
             "example": "66b2f0c0c5a0d94d2b8c1234"
           },
           "name": {
             "type": "string",
+            "minLength": 1,
             "example": "Igor"
           },
           "email": {
@@ -644,6 +705,7 @@
           },
           "avatarURL": {
             "type": "string",
+            "format": "uri-reference",
             "nullable": true,
             "description": "Public URL to the user's avatar (local or CDN)",
             "example": "/avatars/1723819200-ava.png"
@@ -651,11 +713,13 @@
           "createdAt": {
             "type": "string",
             "format": "date-time",
+            "readOnly": true,
             "example": "2025-08-16T09:15:27.000Z"
           },
           "updatedAt": {
             "type": "string",
             "format": "date-time",
+            "readOnly": true,
             "example": "2025-08-16T09:15:27.000Z"
           }
         }
@@ -835,6 +899,27 @@
             "type": "string",
             "nullable": true,
             "description": "Optional direct URL to a photo (usually set by the server after multipart upload).\n"
+          }
+        }
+      },
+      "SuccessBase": {
+        "type": "object",
+        "description": "Standard success envelope fields.",
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "success"
+            ],
+            "example": "success"
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable success message",
+            "example": "Successfully found contacts!"
           }
         }
       }

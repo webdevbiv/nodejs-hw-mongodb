@@ -11,7 +11,7 @@ info:
 servers:
   - url: https://<your-render-app>.onrender.com
     description: Production (Render)
-  - url: http://localhost:3000
+  - url: http://localhost:8080
     description: Local
 
 tags:
@@ -45,22 +45,17 @@ components:
       scheme: bearer
       bearerFormat: JWT
 
-  components:
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-
   schemas:
-    User:              { $ref: ./swagger/components/schemas/User.yaml }
-    RegisterBody:      { $ref: ./swagger/components/schemas/RegisterBody.yaml }
-    LoginBody:         { $ref: ./swagger/components/schemas/LoginBody.yaml }
-    AuthResponse:      { $ref: ./swagger/components/schemas/AuthResponse.yaml }
-    Contact:           { $ref: ./swagger/components/schemas/Contact.yaml }
-    CreateContactJSON: { $ref: ./swagger/components/schemas/CreateContactJSON.yaml }
-    UpdateContactJSON: { $ref: ./swagger/components/schemas/UpdateContactJSON.yaml }
-    SuccessBase:       { $ref: ./swagger/components/schemas/SuccessBase.yaml } 
+    User: { $ref: ./swagger/components/schemas/User.yaml }
+    RegisterBody: { $ref: ./swagger/components/schemas/RegisterBody.yaml }
+    LoginBody: { $ref: ./swagger/components/schemas/LoginBody.yaml }
+    AuthResponse: { $ref: ./swagger/components/schemas/AuthResponse.yaml }
+    Contact: { $ref: ./swagger/components/schemas/Contact.yaml }
+    CreateContactJSON:
+      { $ref: ./swagger/components/schemas/CreateContactJSON.yaml }
+    UpdateContactJSON:
+      { $ref: ./swagger/components/schemas/UpdateContactJSON.yaml }
+    SuccessBase: { $ref: ./swagger/components/schemas/SuccessBase.yaml }
 
   responses:
     Error: { $ref: ./swagger/components/responses/Error.yaml }
