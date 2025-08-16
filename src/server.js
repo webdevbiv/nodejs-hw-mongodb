@@ -20,6 +20,7 @@ app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
 
+// Resolve the base URL for the API
 function resolveBaseUrl(port) {
   const { PUBLIC_URL, RENDER_EXTERNAL_URL, VERCEL_URL, RAILWAY_PUBLIC_DOMAIN } =
     process.env;
