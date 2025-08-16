@@ -26,12 +26,11 @@ post:
           examples:
             created:
               value:
-                _id: '66b2f0c0c5a0d94d2b8c1234'
+                _id: '6892401c0134ece992c7de3d'
                 name: 'Igor'
                 email: 'igor@example.com'
-                avatarURL: null
-                createdAt: '2025-08-16T09:15:27.000Z'
-                updatedAt: '2025-08-16T09:15:27.000Z'
+                createdAt: '2025-08-05T17:32:12.584Z'
+                updatedAt: '2025-08-05T17:32:12.584Z'
     '400':
       $ref: ../components/responses/Error.yaml
     '409':

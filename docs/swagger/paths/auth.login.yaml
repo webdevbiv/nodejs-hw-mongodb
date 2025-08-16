@@ -1,18 +1,39 @@
-responses:
-  '200':
-    description: Logged in
+# docs/swagger/paths/auth.login.yaml
+post:
+  tags: [Auth]
+  summary: Login and get tokens
+  operationId: loginUser
+  security: [] # public
+  requestBody:
+    required: true
     content:
       application/json:
         schema:
-          $ref: ../components/schemas/AuthResponse.yaml
+          $ref: ../components/schemas/LoginBody.yaml
         examples:
-          success:
+          sample:
             value:
-              accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.access.payload.sig'
-              refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.refresh.payload.sig'
-              user:
-                _id: '6892401c0134ece992c7de3d'
-                name: 'Igor Berezhnyy'
-                email: 'igor@example.com'
-                createdAt: '2025-08-05T17:32:12.584Z'
-                updatedAt: '2025-08-05T17:32:12.584Z'
+              email: igor@example.com
+              password: secret123
+  responses:
+    '200':
+      description: Logged in
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/AuthResponse.yaml
+          examples:
+            success:
+              value:
+                accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.access.payload.sig'
+                refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.refresh.payload.sig'
+                user:
+                  _id: '6892401c0134ece992c7de3d'
+                  name: 'Igor'
+                  email: 'igor@example.com'
+                  createdAt: '2025-08-05T17:32:12.584Z'
+                  updatedAt: '2025-08-05T17:32:12.584Z'
+    '400':
+      $ref: ../components/responses/Error.yaml
+    '401':
+      $ref: ../components/responses/Error.yaml

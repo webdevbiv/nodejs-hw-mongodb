@@ -1,18 +1,27 @@
-responses:
-  '200':
-    description: Session refreshed
-    content:
-      application/json:
-        schema:
-          $ref: ../components/schemas/AuthResponse.yaml
-        examples:
-          refreshed:
-            value:
-              accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.new.access.sig'
-              refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.new.refresh.sig'
-              user:
-                _id: '6892401c0134ece992c7de3d'
-                name: 'Igor Berezhnyy'
-                email: 'igor@example.com'
-                createdAt: '2025-08-05T17:32:12.584Z'
-                updatedAt: '2025-08-05T17:32:12.584Z'
+# docs/swagger/paths/auth.refresh.yaml
+post:
+  tags: [Auth]
+  summary: Refresh session using refresh token
+  operationId: refreshSession
+  description: Uses HTTP-only refresh token cookie to issue new access/refresh tokens.
+  security: [] # public (cookie-based)
+  responses:
+    '200':
+      description: Session refreshed
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/AuthResponse.yaml
+          examples:
+            refreshed:
+              value:
+                accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.new.access.sig'
+                refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.new.refresh.sig'
+                user:
+                  _id: '6892401c0134ece992c7de3d'
+                  name: 'Igor'
+                  email: 'igor@example.com'
+                  createdAt: '2025-08-05T17:32:12.584Z'
+                  updatedAt: '2025-08-05T17:32:12.584Z'
+    '401':
+      $ref: ../components/responses/Error.yaml
