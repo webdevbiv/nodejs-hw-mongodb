@@ -1,4 +1,5 @@
-# redocly.yaml
+# ../redocly.yaml
+
 extends:
   - recommended
 

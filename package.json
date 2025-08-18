@@ -12,9 +12,10 @@
     "dev": "nodemon src/index.js",
     "build": "npm run build-docs",
     "build-docs": "redocly bundle docs/openapi.yaml --ext json -o docs/swagger.json",
-    "preview-docs": "redocly preview-docs",
-    "lint-docs": "redocly lint main",
-    "docs": "npm run build-docs && redocly preview-docs",
+    "build-html": "redocly build-docs docs/openapi.yaml -o docs/index.html",
+    "preview-docs": "npm run build-html && npx http-server docs -p 4000 -o /index.html",
+    "lint-docs": "redocly lint docs/openapi.yaml",
+    "docs": "npm run preview-docs",
     "prestart": "npm run build-docs",
     "predev": "npm run build-docs"
   },
