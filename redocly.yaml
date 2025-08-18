@@ -16,7 +16,17 @@ rules:
   no-server-example.com: off
 
 openapi:
-  htmlTemplate: ./docs/index.html
   pagination: section
   expandResponses: '200,201,4XX'
   showExtensions: true
+  htmlTemplate: ./docs/index.html
+
+theme:
+  colors:
+    primary:
+      main: '#32329f'
+  generateCodeSamples:
+    languages:
+      - lang: curl
+      - lang: Node.js
+      - lang: JavaScript

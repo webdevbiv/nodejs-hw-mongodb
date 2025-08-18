@@ -1,34 +1,68 @@
 # docs/swagger/paths/contacts.id.yaml
-parameters:
-  - in: path
-    name: contactId
-    required: true
-    schema: { type: string }
-    description: Mongo ObjectId of the contact
-
-get:
-  tags: [Contacts]
-  summary: Get contact by id
-  operationId: getContactById
+patch:
+  tags:
+    - Contacts
+  summary: Update contact by id (multipart/form-data)
+  operationId: updateContact
   security:
     - bearerAuth: []
+  parameters:
+    - in: path
+      name: contactId
+      required: true
+      description: Contact ID (Mongo ObjectId)
+      schema:
+        type: string
+        example: '66b2f0c0c5a0d94d2b8c5678'
+  requestBody:
+    required: true
+    content:
+      multipart/form-data:
+        schema:
+          type: object
+          description: Send only fields you actually update.
+          properties:
+            name:
+              type: string
+              example: 'Alice Test'
+            email:
+              type: string
+              format: email
+              example: 'alice@example.com'
+            phoneNumber:
+              type: string
+              example: '+380501234567'
+            isFavourite:
+              type: boolean
+              example: true
+            contactType:
+              type: string
+              description: 'One of: work, home, personal, etc.'
+              example: 'work'
+            photo:
+              type: string
+              format: binary
+              description: New contact photo file
+        encoding:
+          photo:
+            contentType: image/jpeg, image/png, image/webp
   responses:
     '200':
-      description: OK
+      description: Successfully patched a contact.
       content:
         application/json:
           schema:
             allOf:
-              - $ref: ../components/schemas/SuccessBase.yaml
+              - $ref: '../../openapi.yaml#/components/schemas/SuccessBase'
               - type: object
                 properties:
                   data:
-                    $ref: ../components/schemas/Contact.yaml
+                    $ref: '../../openapi.yaml#/components/schemas/Contact'
           examples:
-            found:
+            updated:
               value:
                 status: success
-                message: 'Contact with ID 66b2f0c0c5a0d94d2b8c5678 found'
+                message: Successfully patched a contact!
                 data:
                   _id: '66b2f0c0c5a0d94d2b8c5678'
                   name: 'Alice Test'
@@ -39,89 +73,10 @@ get:
                   photo: 'https://res.cloudinary.com/demo/image/upload/sample.jpg'
                   userId: '6698c7360e59d8758205404f'
                   createdAt: '2025-08-14T19:10:04.073Z'
-                  updatedAt: '2025-08-14T19:34:07.478Z'
-    '401':
-      $ref: ../components/responses/Error.yaml
-    '404':
-      $ref: ../components/responses/Error.yaml
+                  updatedAt: '2025-08-16T12:00:00.000Z'
     '400':
-      $ref: ../components/responses/Error.yaml
-
-patch:
-  tags: [Contacts]
-  summary: Update contact (JSON or multipart)
-  operationId: updateContact
-  description: >
-    Accepts JSON fields and/or multipart/form-data with a `photo` file to
-    replace the existing contact photo.
-  security:
-    - bearerAuth: []
-  requestBody:
-    required: true
-    content:
-      application/json:
-        schema:
-          $ref: ../components/schemas/UpdateContactJSON.yaml
-      multipart/form-data:
-        schema:
-          type: object
-          properties:
-            name: { type: string }
-            email: { type: string, format: email }
-            phoneNumber: { type: string }
-            isFavourite: { type: boolean }
-            contactType: { type: string }
-            photo:
-              type: string
-              format: binary
-              description: New contact photo file
-  responses:
-    '200':
-      description: Updated
-      content:
-        application/json:
-          schema:
-            allOf:
-              - $ref: ../components/schemas/SuccessBase.yaml
-              - type: object
-                properties:
-                  data:
-                    $ref: ../components/schemas/Contact.yaml
-          examples:
-            updated:
-              value:
-                status: success
-                message: Successfully patched a contact!
-                data:
-                  _id: '66b2f0c0c5a0d94d2b8c5678'
-                  name: 'Alice Test'
-                  email: 'alice@example.com'
-                  phoneNumber: '+380500000000'
-                  isFavourite: true
-                  contactType: 'work'
-                  photo: 'https://res.cloudinary.com/demo/image/upload/sample.jpg'
-                  userId: '6698c7360e59d8758205404f'
-                  createdAt: '2025-08-14T19:10:04.073Z'
-                  updatedAt: '2025-08-16T12:45:10.000Z'
+      $ref: '../../openapi.yaml#/components/responses/Error'
     '401':
-      $ref: ../components/responses/Error.yaml
+      $ref: '../../openapi.yaml#/components/responses/Error'
     '404':
-      $ref: ../components/responses/Error.yaml
-    '400':
-      $ref: ../components/responses/Error.yaml
-
-delete:
-  tags: [Contacts]
-  summary: Delete contact
-  operationId: deleteContact
-  security:
-    - bearerAuth: []
-  responses:
-    '204':
-      description: Deleted
-    '401':
-      $ref: ../components/responses/Error.yaml
-    '404':
-      $ref: ../components/responses/Error.yaml
-    '400':
-      $ref: ../components/responses/Error.yaml
+      $ref: '../../openapi.yaml#/components/responses/Error'

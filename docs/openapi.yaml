@@ -11,10 +11,10 @@ info:
 
 # Where this API can be reached
 servers:
-  - url: 'https://contacts-xxm3.onrender.com'
-    description: 'Production (Render)'
-  - url: 'http://localhost:3000'
-    description: 'Local'
+  - url: https://contacts-xxm3.onrender.com
+    description: Production (Render)
+  - url: http://localhost:3000
+    description: Local (dev only)
 
 # High-level groups for endpoints
 tags:
